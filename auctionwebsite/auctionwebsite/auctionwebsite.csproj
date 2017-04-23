@@ -39,10 +39,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -109,27 +114,70 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Admin\AdminController.cs" />
+    <Compile Include="Controllers\Admin\CateparentController.cs" />
+    <Compile Include="DAL\AuctionContext.cs" />
+    <Compile Include="DAL\AuctionDataInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cate.cs" />
+    <Compile Include="Models\Cateparent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\assets\css\main-style.css" />
+    <Content Include="Content\assets\css\style.css" />
+    <Content Include="Content\assets\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\assets\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\assets\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\assets\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\assets\img\logo.png" />
+    <Content Include="Content\assets\img\user.jpg" />
+    <Content Include="Content\assets\plugins\bootstrap\bootstrap.css" />
+    <Content Include="Content\assets\plugins\bootstrap\bootstrap.js" />
+    <Content Include="Content\assets\plugins\bootstrap\bootstrap.min.js" />
+    <Content Include="Content\assets\plugins\dataTables\dataTables.bootstrap.css" />
+    <Content Include="Content\assets\plugins\dataTables\dataTables.bootstrap.js" />
+    <Content Include="Content\assets\plugins\dataTables\jquery.dataTables.js" />
+    <Content Include="Content\assets\plugins\flot\excanvas.min.js" />
+    <Content Include="Content\assets\plugins\flot\jquery.flot.js" />
+    <Content Include="Content\assets\plugins\flot\jquery.flot.pie.js" />
+    <Content Include="Content\assets\plugins\flot\jquery.flot.resize.js" />
+    <Content Include="Content\assets\plugins\flot\jquery.flot.tooltip.min.js" />
+    <Content Include="Content\assets\plugins\jquery-1.10.2.js" />
+    <Content Include="Content\assets\plugins\metisMenu\jquery.metisMenu.js" />
+    <Content Include="Content\assets\plugins\morris\morris-0.4.3.min.css" />
+    <Content Include="Content\assets\plugins\morris\morris.js" />
+    <Content Include="Content\assets\plugins\morris\raphael-2.1.0.min.js" />
+    <Content Include="Content\assets\plugins\pace\pace-theme-big-counter.css" />
+    <Content Include="Content\assets\plugins\pace\pace.js" />
+    <Content Include="Content\assets\plugins\social-buttons\social-buttons.css" />
+    <Content Include="Content\assets\plugins\timeline\timeline.css" />
+    <Content Include="Content\assets\scripts\dashboard-demo.js" />
+    <Content Include="Content\assets\scripts\flot-demo.js" />
+    <Content Include="Content\assets\scripts\morris-demo.js" />
+    <Content Include="Content\assets\scripts\siminta.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\assets\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\assets\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\assets\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\assets\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\assets\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\assets\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\assets\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -146,12 +194,14 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\admin_layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Admin\Dashboard.cshtml" />
+    <Content Include="Views\Cateparent\Create.cshtml" />
+    <Content Include="Views\Cateparent\Delete.cshtml" />
+    <Content Include="Views\Cateparent\Details.cshtml" />
+    <Content Include="Views\Cateparent\Edit.cshtml" />
+    <Content Include="Views\Cateparent\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
