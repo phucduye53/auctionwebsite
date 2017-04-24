@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using auctionwebsite.Models;
 using auctionwebsite.DAL;
+using PagedList;
 
 namespace auctionwebsite.Controllers.Admin
 {
