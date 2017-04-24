@@ -1,23 +1,17 @@
 ﻿@model auctionwebsite.Models.Cateparent
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Khởi tạo danh mục";
     Layout = "~/Views/Shared/admin_layout.cshtml";
 }
-
-<h2>Create</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    
     <div class="form-horizontal">
-        <h4>Cateparent</h4>
-        <hr />
         @Html.ValidationSummary(true)
-
         <div class="form-group">
-            @Html.LabelFor(model => model.CateparentName, new { @class = "control-label col-md-2" })
+            <div class="control-label col-md-2">Tên danh mục</div>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.CateparentName)
                 @Html.ValidationMessageFor(model => model.CateparentName)
@@ -26,12 +20,12 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Khởi tạo" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Trở lại danh sách", "Index")
 </div>
