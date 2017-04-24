@@ -28,3 +28,7 @@ C:\Users\Toshiba\Documents\Visual Studio 2013\Projects\Web2\auctionwebsite\aucti
 C:\Users\Toshiba\Documents\Visual Studio 2013\Projects\Web2\auctionwebsite\auctionwebsite\bin\EntityFramework.SqlServer.dll
 C:\Users\Toshiba\Documents\Visual Studio 2013\Projects\Web2\auctionwebsite\auctionwebsite\bin\EntityFramework.xml
 C:\Users\Toshiba\Documents\Visual Studio 2013\Projects\Web2\auctionwebsite\auctionwebsite\bin\EntityFramework.SqlServer.xml
+C:\Users\Toshiba\Documents\Visual Studio 2013\Projects\Web2\auctionwebsite\auctionwebsite\bin\PagedList.dll
+C:\Users\Toshiba\Documents\Visual Studio 2013\Projects\Web2\auctionwebsite\auctionwebsite\bin\PagedList.Mvc.dll
+C:\Users\Toshiba\Documents\Visual Studio 2013\Projects\Web2\auctionwebsite\auctionwebsite\bin\PagedList.xml
+C:\Users\Toshiba\Documents\Visual Studio 2013\Projects\Web2\auctionwebsite\auctionwebsite\bin\PagedList.Mvc.xml
