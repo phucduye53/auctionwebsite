@@ -46,6 +46,12 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -120,6 +126,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\Admin\AdminController.cs" />
+    <Compile Include="Controllers\Admin\CateController.cs" />
     <Compile Include="Controllers\Admin\CateparentController.cs" />
     <Compile Include="DAL\AuctionContext.cs" />
     <Compile Include="DAL\AuctionDataInitializer.cs" />
@@ -165,6 +172,7 @@
     <Content Include="Content\assets\scripts\siminta.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -202,6 +210,11 @@
     <Content Include="Views\Cateparent\Details.cshtml" />
     <Content Include="Views\Cateparent\Edit.cshtml" />
     <Content Include="Views\Cateparent\Index.cshtml" />
+    <Content Include="Views\Cate\Create.cshtml" />
+    <Content Include="Views\Cate\Delete.cshtml" />
+    <Content Include="Views\Cate\Details.cshtml" />
+    <Content Include="Views\Cate\Edit.cshtml" />
+    <Content Include="Views\Cate\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
