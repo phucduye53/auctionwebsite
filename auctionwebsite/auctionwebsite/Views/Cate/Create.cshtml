@@ -17,7 +17,7 @@
             <div class="control-label col-md-2">Tên danh mục con</div>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.CateName)
-                @Html.ValidationMessageFor(model => model.CateName)
+                @Html.ValidationMessageFor(model => model.CateName, null, new { @class = "text-danger" })
             </div>
         </div>
 
@@ -25,7 +25,7 @@
             <div class="control-label col-md-2">Danh mục cha</div>
             <div class="col-md-10">
                 @Html.DropDownList("CateparentID", String.Empty)
-                @Html.ValidationMessageFor(model => model.CateparentID)
+                @Html.ValidationMessageFor(model => model.CateparentID, null, new { @class = "text-danger" })
             </div>
         </div>
 

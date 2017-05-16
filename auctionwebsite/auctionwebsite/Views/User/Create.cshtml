@@ -1,0 +1,116 @@
+﻿@model auctionwebsite.Models.User
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/home_layout.cshtml";
+}
+<div class="span9">
+<ul class="breadcrumb">
+    <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
+    <li class="active">Đăng ký</li>
+</ul>
+<h3> Đăng ký tài khoản</h3>
+<div class="well">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <div class="control-group">
+            </div>
+            @Html.ValidationSummary(true)
+            <div class="control-group">
+                <label class="control-label" for="inputLnam">Tài khoản  <sup>*</sup></label>
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.UserName, new { @placeholder = "Nhập tài khoản" })
+                    @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "alert-error" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="inputPassword1">Mật khẩu  <sup>*</sup></label>
+                <div class="controls">
+                    @Html.PasswordFor(model => model.UserPassword, new { @placeholder = "Nhập mật khẩu" })
+                    @Html.ValidationMessageFor(model => model.UserPassword, null, new { @class = "alert-error" })
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPassword1">Nhập lại mật khẩu  <sup>*</sup></label>
+                <div class="controls">
+                    @Html.PasswordFor(model => model.ConfirmPassword, new { @placeholder = "Nhập lại mật khẩu" })
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "alert-error" })
+                </div>
+            </div>
+            <div hidden class="control-group">
+
+                <div class="controls">
+                    @Html.EditorFor(model => model.Password)
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+            </div>
+
+            <div hidden >
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.UserLevel, new { @Value = "0" })
+                    @Html.ValidationMessageFor(model => model.UserLevel)
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="input_email">Email  <sup>*</sup></label>
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.UserEmail, new { @placeholder = "Nhập Email" })
+                    @Html.ValidationMessageFor(model => model.UserEmail, null, new { @class = "alert-error" })
+                </div>
+            </div>
+            <h4>Thông tin cá nhân</h4>
+            <div class="control-group">
+                <label class="control-label" for="inputFname">Họ<sup>*</sup></label>
+                <div class="controls">
+                    @Html.EditorFor(model => model.UserFirstName)
+                    @Html.ValidationMessageFor(model => model.UserFirstName)
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="inputLname">Tên  <sup>*</sup></label>
+                <div class="controls">
+                    @Html.EditorFor(model => model.UserLastName)
+                    @Html.ValidationMessageFor(model => model.UserLastName)
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="inputLname">Ngày sinh  <sup>*</sup></label>
+                <div class="controls">
+                    @Html.EditorFor(model => model.UserDOB)
+                    @Html.ValidationMessageFor(model => model.UserDOB)
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="address">Địa chỉ  <sup></sup></label>
+                <div class="controls">
+                    @Html.EditorFor(model => model.UserAddress)
+                    @Html.ValidationMessageFor(model => model.UserAddress)
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="address">Thành phố  <sup></sup></label>
+                <div class ="controls">
+                    @Html.EditorFor(model => model.UserCity)
+                    @Html.ValidationMessageFor(model => model.UserCity)
+                </div>
+            </div>
+            <p><sup>*</sup>Các trường cần thiết phải nhập</p>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="submit" value="Create" class="btn btn-large btn-success" />
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+    </div>

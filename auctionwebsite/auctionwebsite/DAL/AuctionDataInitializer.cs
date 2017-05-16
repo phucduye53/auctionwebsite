@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using auctionwebsite.Helpers;
 
 namespace auctionwebsite.DAL
 {
@@ -44,6 +45,15 @@ namespace auctionwebsite.DAL
                 new Cate{CateName="Nikon",CateparentID=5}
             };
             Cates.ForEach(s => context.Cates.Add(s));
+            context.SaveChanges();
+            string userpassword = Helpers.Helpers.EncodePasswordMd5("admin");
+            string userpassword2 = Helpers.Helpers.EncodePasswordMd5("0919061624");
+            var Users = new List<User>
+            {
+                new User{UserName="admin",Password=userpassword,UserDOB="1/1/1991",UserEmail="phucduye53@gmail.com",UserAddress="327/10 Phan Văn Trị",UserFirstName="Lê",UserLastName="Trúc",UserCity="Hồ Chí Minh City",UserLevel=1},
+                new User{UserName="phucduye53",Password=userpassword2,UserDOB="1/2/1991",UserEmail="phucduye54@gmail.com",UserAddress="327/10",UserFirstName="Phượng",UserLastName="Phạm",UserCity="Phan Thiết",UserLevel=0}
+            };
+            Users.ForEach(s => context.Users.Add(s));
             context.SaveChanges();
         }
     }

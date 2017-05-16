@@ -14,7 +14,7 @@
             <div class="control-label col-md-2">Tên danh mục</div>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.CateparentName)
-                @Html.ValidationMessageFor(model => model.CateparentName)
+                @Html.ValidationMessageFor(model => model.CateparentName, null, new { @class = "text-danger" })
             </div>
         </div>
 

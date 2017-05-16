@@ -16,6 +16,7 @@ namespace auctionwebsite.DAL
         }
         public DbSet<Cate> Cates { get; set; }
         public DbSet<Cateparent> Cateparents { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
