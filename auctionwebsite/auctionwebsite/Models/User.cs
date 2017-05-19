@@ -1,4 +1,5 @@
-﻿using System;
+﻿using auctionwebsite.DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,6 +10,7 @@ namespace auctionwebsite.Models
 {
     public class User
     {
+        private AuctionContext db = new AuctionContext();
         public int UserID { get; set; }
         [Required(ErrorMessage = "Chưa nhập tên tài khoản")]
         [StringLength(16, ErrorMessage = "Tên tài khoản chỉ được ít hơn 16 ký tự.")]
@@ -26,16 +28,24 @@ namespace auctionwebsite.Models
         public string Password { get; set; }
         [Required]
         public int UserLevel { get; set; }
-        [System.Web.Mvc.Remote("IsEmailExits", "User", ErrorMessage = "Email đã tồn tại.")]
-
         [Required(ErrorMessage = "Chưa nhập Email")]
         [EmailAddress(ErrorMessage = "Nhập không đúng địa chỉ Email")]
+        [System.Web.Mvc.Remote("IsEmailExits", "User", ErrorMessage = "Email đã tồn tại.")]
         public string UserEmail { get; set; }
+        [Required(ErrorMessage = "Chưa nhập họ khách hàng")]
         public string UserFirstName { get; set; }
+        [Required(ErrorMessage = "Chưa nhập tên khách hàng")]
         public string UserLastName { get; set; }
         public string UserDOB { get; set; }
         public string UserAddress { get; set; }
         public string UserCity { get; set; }
+
+        public int UserCash { get; set; }
+        public string UserFullName
+        {
+            get { return UserFirstName + " " + UserLastName; }
+        }
+        public virtual ICollection<Product> Products { get; set; }
 
     }
 }

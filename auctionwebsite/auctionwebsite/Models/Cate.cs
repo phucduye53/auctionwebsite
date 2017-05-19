@@ -15,5 +15,6 @@ namespace auctionwebsite.Models
         [Required(ErrorMessage="Chưa chọn danh mục cha.")]
         public int CateparentID { get; set; }
         public virtual Cateparent Cateparent { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
