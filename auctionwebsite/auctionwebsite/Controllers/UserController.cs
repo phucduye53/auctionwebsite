@@ -4,6 +4,9 @@ using System.Net;
 using System.Web.Mvc;
 using auctionwebsite.Models;
 using auctionwebsite.DAL;
+using System.Web.Security;
+using auctionwebsite.Helpers;
+using System;
 
 namespace auctionwebsite.Controllers
 {
@@ -12,12 +15,14 @@ namespace auctionwebsite.Controllers
         private AuctionContext db = new AuctionContext();
 
         // GET: /User/
+            [CheckLogin]
         public ActionResult Index()
         {
             return View(db.Users.ToList());
         }
 
         // GET: /User/Details/5
+            [CheckLogin]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -47,6 +52,7 @@ namespace auctionwebsite.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.UserCash = 1000;
                 user.Password = Helpers.Helpers.EncodePasswordMd5(user.UserPassword);
                 db.Users.Add(user);
                 db.SaveChanges();
@@ -57,6 +63,7 @@ namespace auctionwebsite.Controllers
         }
 
         // GET: /User/Edit/5
+            [CheckLogin]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -76,6 +83,7 @@ namespace auctionwebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CheckLogin]
         public ActionResult Edit([Bind(Include = "UserID,UserName,UserPassword,ConfirmPassword,Password,UserEmail,UserLevel,UserFirstName,UserLastName,UserDOB,UserAddress,UserCity")] User user)
         {
             if (ModelState.IsValid)
@@ -89,6 +97,7 @@ namespace auctionwebsite.Controllers
         }
 
         // GET: /User/Delete/5
+            [CheckLogin]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -106,6 +115,7 @@ namespace auctionwebsite.Controllers
         // POST: /User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [CheckLogin]
         public ActionResult DeleteConfirmed(int id)
         {
             User user = db.Users.Find(id);
@@ -131,7 +141,44 @@ namespace auctionwebsite.Controllers
         {
             //check if any of the Email matches the Email specified in the Parameter using the ANY extension method.  
             return Json(!db.Users.Any(x => x.UserEmail == Email), JsonRequestBehavior.AllowGet);
-        }  
+        }
+        public ActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Login([Bind(Include = "Username,Password,Remember")]LoginUser model)
+        {
+            string password = Helpers.Helpers.EncodePasswordMd5(model.Password);
+            var user = db.Users.Where(u => u.UserName == model.Username && u.Password == password ).FirstOrDefault();
+            if(user!=null)
+            {
+                if (model.Remember)
+                {
+                    Response.Cookies["userID"].Value = user.UserID.ToString();
+                    Response.Cookies["userID"].Expires = DateTime.Now.AddDays(3);
+                }
+                Session["isLogin"] = 1;
+                Session["user"] = user;
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Errormsg = "Tài khoản hoặc mật khẩu không đúng";
+                return View();
+            }
+        }
+         [CheckLogin]
+        public ActionResult Logout()
+        {
+            CurrentContext.Destroy();
+            return RedirectToAction("Index", "Home");
+        }
+         [CheckLogin]
+         public ActionResult Summary()
+         {
+             return View();
+         }
 
     }
 }
