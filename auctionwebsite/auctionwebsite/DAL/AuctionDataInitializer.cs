@@ -50,8 +50,7 @@ namespace auctionwebsite.DAL
             string userpassword2 = Helpers.Helpers.EncodePasswordMd5("0919061624");
             var Users = new List<User>
             {
-                new User{UserName="admin",Password=userpassword,UserDOB="1/1/1991",UserEmail="phucduye53@gmail.com",UserAddress="327/10 Phan Văn Trị",UserFirstName="Lê",UserLastName="Trúc",UserCity="Hồ Chí Minh City",UserLevel=1},
-                new User{UserName="phucduye53",Password=userpassword2,UserDOB="1/2/1991",UserEmail="phucduye54@gmail.com",UserAddress="327/10",UserFirstName="Phượng",UserLastName="Phạm",UserCity="Phan Thiết",UserLevel=0}
+                new User{UserName="phucduye54",Password=userpassword2,UserEmail="phucduye53@gmail.com",UserAddress="327/10 Phan Văn Trị",UserFirstName="Lê Quang",UserLastName="Trúc",UserCity="Hồ Chí Minh City",UserLevel=1,UserCash=1000}
             };
             Users.ForEach(s => context.Users.Add(s));
             context.SaveChanges();
