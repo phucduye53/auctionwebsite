@@ -11,6 +11,7 @@ namespace auctionwebsite.DAL
     {
         protected override void Seed(AuctionContext context)
         {
+
             var Cateparents = new List<Cateparent>
            {
                new Cateparent{CateparentName="Tủ sách"},
@@ -50,7 +51,9 @@ namespace auctionwebsite.DAL
             string userpassword2 = Helpers.Helpers.EncodePasswordMd5("0919061624");
             var Users = new List<User>
             {
-                new User{UserName="phucduye54",Password=userpassword2,UserEmail="phucduye53@gmail.com",UserAddress="327/10 Phan Văn Trị",UserFirstName="Lê Quang",UserLastName="Trúc",UserCity="Hồ Chí Minh City",UserLevel=1,UserCash=1000}
+                new User{UserName="phucduye54",Password=userpassword2,UserLevel=1,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye54@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"},
+                new User{UserName="phucduye55",Password=userpassword2,UserLevel=0,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye55@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"},
+                new User{UserName="phucduye56",Password=userpassword2,UserLevel=1,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye56@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"}
             };
             Users.ForEach(s => context.Users.Add(s));
             context.SaveChanges();
