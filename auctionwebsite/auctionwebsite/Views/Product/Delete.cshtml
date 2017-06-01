@@ -1,0 +1,104 @@
+﻿@model auctionwebsite.Models.Product
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>Product</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Cate.CateName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Cate.CateName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ProductName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ProductPrice)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ProductPrice)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ProductSoldPrice)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ProductSoldPrice)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ProductDes)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ProductDes)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ProductDateSold)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ProductDateSold)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UserUploadID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UserUploadID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UserBuyID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UserBuyID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ProductPointRequired)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ProductPointRequired)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
+    </div>
+</body>
+</html>
