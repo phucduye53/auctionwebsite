@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using auctionwebsite.Models;
 using auctionwebsite.DAL;
+using auctionwebsite.Helpers;
+using System.IO;
 
 namespace auctionwebsite.Controllers
 {
@@ -16,13 +18,16 @@ namespace auctionwebsite.Controllers
         private AuctionContext db = new AuctionContext();
 
         // GET: /Product/
+        [CheckLogin]
         public ActionResult Index()
         {
-            var products = db.Products.Include(p => p.Cate);
+            var User = CurrentContext.GetCurUser();
+            var products = db.Products.Where(u=>u.UserUploadID==User.UserID);
             return View(products.ToList());
         }
 
         // GET: /Product/Details/5
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -38,6 +43,7 @@ namespace auctionwebsite.Controllers
         }
 
         // GET: /Product/Create
+        [CheckLogin]
         public ActionResult Create()
         {
             ViewBag.CateParentID = new SelectList(db.Cateparents, "CateparentID", "CateparentName");
@@ -49,32 +55,64 @@ namespace auctionwebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="ProductID,ProductName,ProductPrice,ProductSoldPrice,ProductDes,ProductDateSold,CateID,UserUploadID,UserBuyID,ProductPointRequired")] Product product)
+        [CheckLogin]
+        public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserUploadID,ProductPointRequired")] Product product, HttpPostedFileBase fileMainInput, List<HttpPostedFileBase> fileSubInput)
         {
+            if(fileMainInput == null)
+            {
+                ViewBag.Errormsg = "Chưa tải hình ảnh của sản phẩm ";
+            }
             if (ModelState.IsValid)
             {
-                db.Products.Add(product);
+                //handle main file
+                product.ProductPicName = Path.GetFileName(fileMainInput.FileName);
+                product.ProductPicExtension = Path.GetExtension(product.ProductPicName);
+                db.Entry(product).State = EntityState.Added;
                 db.SaveChanges();
+                var path = Path.Combine(Server.MapPath("~/Img/"),product.ProductID.ToString()+"_"+product.ProductPicName);
+                fileMainInput.SaveAs(path);
+                foreach (HttpPostedFileBase file in fileSubInput)
+                {
+                    if (file != null)
+                    {
+                        FileDetail fileDetail = new FileDetail()
+                        {
+                            FileName = Path.GetFileName(file.FileName),
+                            Extension = Path.GetExtension(Path.GetFileName(file.FileName)),
+                            ProductID = product.ProductID
+                        };
+                        db.Entry(fileDetail).State = EntityState.Added;
+                        db.SaveChanges();
+                        var pathSub = Path.Combine(Server.MapPath("~/Img/"), fileDetail.ProductID + "_" + fileDetail.FileDetailID + "_" + fileDetail.FileName);
+                        file.SaveAs(pathSub);
+
+
+                    }
+                }
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CateID = new SelectList(db.Cates, "CateID", "CateName", product.CateID);
+            ViewBag.CateParentID = new SelectList(db.Cateparents, "CateparentID", "CateparentName");
             return View(product);
         }
 
         // GET: /Product/Edit/5
+                [CheckLogin]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = db.Products.Include(s => s.FileDetails).SingleOrDefault(x => x.ProductID == id);
             if (product == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CateID = new SelectList(db.Cates, "CateID", "CateName", product.CateID);
+            Cate temp = db.Cates.Where(s => s.CateID == product.CateID).FirstOrDefault();
+            Cateparent temp2 = db.Cateparents.Where(s => s.CateparentID == product.CateparentID).FirstOrDefault();
+            ViewBag.Cateparent = temp.CateName;
+            ViewBag.CateName = temp2.CateparentName;
             return View(product);
         }
 
@@ -83,19 +121,49 @@ namespace auctionwebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="ProductID,ProductName,ProductPrice,ProductSoldPrice,ProductDes,ProductDateSold,CateID,UserUploadID,UserBuyID,ProductPointRequired")] Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CateID = new SelectList(db.Cates, "CateID", "CateName", product.CateID);
-            return View(product);
-        }
+        [CheckLogin]
+                public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserUploadID,ProductPointRequired")] Product product, List<HttpPostedFileBase> fileSubInput)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        db.Entry(product).State = EntityState.Modified;
+                        db.SaveChanges();
+                        Product temp = db.Products.Include(s => s.FileDetails).SingleOrDefault(x => x.ProductID == product.ProductID);
+                        var count =  temp.FileDetails.Count();
+                        var countSub = 0;
+                        foreach (HttpPostedFileBase file in fileSubInput)
+                        {
+                            countSub++;
+                        }
+                        if (count+countSub>=4)
+                        {
+                            ViewBag.Message = "Ảnh phụ không được quá 3 tấm";
+                        }
+                        foreach (HttpPostedFileBase file in fileSubInput)
+                        {
+                            if (file != null)
+                            {
+                                FileDetail fileDetail = new FileDetail()
+                                {
+                                    FileName = Path.GetFileName(file.FileName),
+                                    Extension = Path.GetExtension(Path.GetFileName(file.FileName)),
+                                    ProductID = product.ProductID
+                                };
+                                db.Entry(fileDetail).State = EntityState.Added;
+                                db.SaveChanges();
+                                var pathSub = Path.Combine(Server.MapPath("~/Img/"), fileDetail.ProductID + "_" + fileDetail.FileDetailID + "_" + fileDetail.FileName);
+                                file.SaveAs(pathSub);
+                            }
+                        }
+                        return RedirectToAction("Index");
+                    }
+
+                    ViewBag.CateParentID = new SelectList(db.Cateparents, "CateparentID", "CateparentName");
+                    return View(product);
+                }
 
         // GET: /Product/Delete/5
+                [CheckLogin]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -113,6 +181,7 @@ namespace auctionwebsite.Controllers
         // POST: /Product/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [CheckLogin]
         public ActionResult DeleteConfirmed(int id)
         {
             Product product = db.Products.Find(id);
@@ -136,6 +205,34 @@ namespace auctionwebsite.Controllers
                          where s.CateparentID==id
                          select s).ToList();
             return Json(new SelectList(Cates, "CateID", "CateName"));
+        }
+        [HttpPost]
+        public JsonResult DeleteFile(int id)
+        {
+            try
+            {
+                FileDetail fileDetail = db.FileDetails.Where(x=>x.FileDetailID==id).FirstOrDefault();
+                if (fileDetail == null)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    return Json(new { Result = "Error" });
+                }
+                //Remove from database
+                db.FileDetails.Remove(fileDetail);
+                db.SaveChanges();
+
+                //Delete file from the file system
+                var pathSub = Path.Combine(Server.MapPath("~/Img/"), fileDetail.ProductID + "_" + fileDetail.FileDetailID + "_" + fileDetail.FileName);
+                if (System.IO.File.Exists(pathSub))
+                {
+                    System.IO.File.Delete(pathSub);
+                }
+                return Json(new { Result = "OK" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
         }
     }
 }
