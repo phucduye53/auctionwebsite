@@ -1,89 +1,64 @@
 ﻿@model IEnumerable<auctionwebsite.Models.Product>
 
 @{
-    Layout = null;
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/user_layout.cshtml";
 }
 
 <!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Cate.CateName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductSoldPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductDes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductDateSold)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserUploadID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserBuyID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductPointRequired)
-            </th>
-            <th></th>
-        </tr>
-    
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cate.CateName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductSoldPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductDes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductDateSold)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserUploadID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserBuyID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductPointRequired)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.ProductID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.ProductID }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.ProductID })
-            </td>
-        </tr>
-    }
-    
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="products.html">Tài khoản</a> <span class="divider">/</span></li>
+        <li class="active">Sản phẩm của tôi đã đăng</li>
+    </ul>
+    </ul>
+    <h3>Sản phẩm của tôi đã đăng[<small>@Model.Count() sản phẩm</small>]</h3>
+    <hr class="soft"/>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Chi tiết</th>
+                <th>Người mua giá cao nhất</th>
+                <th>Giá hiện tại</th>
+                <th>Giá khởi điểm</th>
+                <th>Trạng thái</th>
+                <th>Hủy đấu giá</th>
+                <th>Chỉnh sửa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+              <tr>
+                <td><a href=""> <img width="60" src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="" /></a></td>
+                <td>@item.ProductDes<br /></td>
+                <td>0</td> @*user highest price buy*@
+                <td>$120.00</td> @*highest price*@
+                <td>@item.ProductPrice</td>
+                  @if(@item.ProductStatus == 0 )
+                  {
+                    <td>Đang chờ xác nhận</td>
+                  }
+                  @if (@item.ProductStatus == 1)
+                  {
+                      <td>Đang đấu giá</td>
+                  }
+                  @if (@item.ProductStatus == 2)
+                  {
+                      <td>Đấu giá thành công</td>
+                  }
+                  @if (@item.ProductStatus == 3)
+                  {
+                      <td>Đấu giá đã hủy</td>
+                  }        
+                <td><button><i class="icon-remove icon-white"></i></button>	</td>
+                <td><a href="#">Sửa</a></td>
+            </tr>
+            }
+        </tbody>
     </table>
-</body>
-</html>
+</div>
+</div></div>
+</div>
