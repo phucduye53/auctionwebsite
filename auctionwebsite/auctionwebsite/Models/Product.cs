@@ -18,9 +18,13 @@ namespace auctionwebsite.Models
         [Required(ErrorMessage = "Chưa nhập bước giá sản phẩm")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Bước giá sản phẩm phải là số")]
         public int ProductTickSize { get; set; }
-        public string ProductSoldPrice { get; set; }
+        public int ProductSoldPrice { get; set; }
+        public int ProductSoldInstantPrice { get; set; }
         public string ProductDes{ get; set; }
-        public DateTime ProductDateSold { get; set; }
+        public int ProductStatus { get; set; }
+        public string ProductDateSold { get; set; }
+        public string ProductPicName { get; set; }
+        public string ProductPicExtension { get; set; }
 
         [Required(ErrorMessage = "Chưa chọn danh mục .")]
         public int CateID { get; set; }
