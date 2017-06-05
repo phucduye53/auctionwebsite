@@ -47,7 +47,6 @@ namespace auctionwebsite.DAL
             };
             Cates.ForEach(s => context.Cates.Add(s));
             context.SaveChanges();
-            string userpassword = Helpers.Helpers.EncodePasswordMd5("admin");
             string userpassword2 = Helpers.Helpers.EncodePasswordMd5("0919061624");
             var Users = new List<User>
             {
@@ -56,6 +55,19 @@ namespace auctionwebsite.DAL
                 new User{UserName="phucduye56",Password=userpassword2,UserLevel=1,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye56@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"}
             };
             Users.ForEach(s => context.Users.Add(s));
+            context.SaveChanges();
+            var Products = new List<Product>
+            {
+                new Product{ProductName="Quạt máy",ProductDateSold="2017/06/14 03:00",ProductPrice=200000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=0,CateID=5,CateparentID=2,UserUploadID=1}
+            };
+            Products.ForEach(s => context.Products.Add(s));
+            context.SaveChanges();
+            var FileDetails = new List<FileDetail>
+            {
+                new FileDetail{FileName="quat2.png",Extension=".png",ProductID=1},
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=1}
+            };
+            FileDetails.ForEach(s => context.FileDetails.Add(s));
             context.SaveChanges();
         }
     }
