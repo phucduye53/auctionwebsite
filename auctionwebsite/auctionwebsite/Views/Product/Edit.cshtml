@@ -170,7 +170,7 @@
 
                 <div class="control-group">
                     <div class="controls">
-                        @Html.TextBoxFor(model => model.UserUploadID, new { @Value = @CurrentContext.GetCurUser().UserID, style = "display: none;" })
+                        @Html.TextBoxFor(model => model.UserID, new { @Value = @CurrentContext.GetCurUser().UserID, style = "display: none;" })
                         @Html.TextBoxFor(model => model.CateparentID, new { @Value = @Model.CateparentID, style = "display: none;" })
                         @Html.TextBoxFor(model => model.CateID, new { @Value = @Model.CateID, style = "display: none;" })
                         @Html.TextBoxFor(model => model.ProductID, new { @Value = @Model.ProductID, style = "display: none;" })
