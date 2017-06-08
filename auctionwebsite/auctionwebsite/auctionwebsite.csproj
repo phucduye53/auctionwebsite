@@ -141,8 +141,10 @@
     <Compile Include="Helpers\CheckLoginAttribute.cs" />
     <Compile Include="Helpers\CurrentContext.cs" />
     <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Models\Bidding.cs" />
     <Compile Include="Models\Cate.cs" />
     <Compile Include="Models\Cateparent.cs" />
+    <Compile Include="Models\Favorite.cs" />
     <Compile Include="Models\FileDetail.cs" />
     <Compile Include="Models\LoginUser.cs" />
     <Compile Include="Models\Product.cs" />
@@ -486,6 +488,7 @@
     <Content Include="Scripts\jquery-ui-sliderAccess.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.min.js" />
+    <Content Include="Scripts\jquery.countdown.js" />
     <Content Include="Scripts\jquery.datetimepicker.full.js" />
     <Content Include="Scripts\jquery.datetimepicker.full.min.js" />
     <Content Include="Scripts\jquery.datetimepicker.min.js" />
@@ -536,6 +539,10 @@
     <Content Include="Views\Product\Details.cshtml" />
     <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Admin\Product.cshtml" />
+    <Content Include="Views\Cateparent\ListPartial.cshtml" />
+    <Content Include="Views\User\FollowList.cshtml" />
+    <Content Include="Views\Product\DetailPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
