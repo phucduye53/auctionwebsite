@@ -58,14 +58,19 @@ namespace auctionwebsite.DAL
             context.SaveChanges();
             var Products = new List<Product>
             {
-                new Product{ProductName="Quạt máy",ProductDateSold="2017/06/14 03:00",ProductPrice=200000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=0,CateID=5,CateparentID=2,UserUploadID=1}
+                new Product{ProductName="Quạt máy",ProductDateSold="2017/06/14 03:00",ProductPrice=200000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=1},
+                new Product{ProductName="Máy ảnh xịn",ProductDateSold="2017/06/14 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=2}
             };
             Products.ForEach(s => context.Products.Add(s));
             context.SaveChanges();
             var FileDetails = new List<FileDetail>
             {
                 new FileDetail{FileName="quat2.png",Extension=".png",ProductID=1},
-                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=1}
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=1},
+                new FileDetail{FileName="mayanh3.jpg",Extension=".jpg",ProductID=2},
+                new FileDetail{FileName="mayanh4.jpg",Extension=".jpg",ProductID=2},
+                new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=2}
+
             };
             FileDetails.ForEach(s => context.FileDetails.Add(s));
             context.SaveChanges();
