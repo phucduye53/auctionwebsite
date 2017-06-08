@@ -30,12 +30,13 @@ namespace auctionwebsite.Models
         public int CateID { get; set; }
         [Required(ErrorMessage = "Chưa chọn danh mục cha.")]
         public int CateparentID { get; set; }
-        public int UserUploadID { get; set; }
+        public int UserID { get; set; }
         public int UserBuyID { get; set; }
         public int ProductPointRequired { get; set; }
         public virtual Cate Cate { get; set; }
-        public virtual Cate CateParent { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<FileDetail> FileDetails { get; set; }
+        public virtual ICollection<Favorite> Favorites { get; set; }
+        public virtual ICollection<Bidding> Biddings { get; set; }
     }
 }
