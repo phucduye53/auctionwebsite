@@ -16,6 +16,12 @@ namespace auctionwebsite.Controllers.Admin
     {
         private AuctionContext db = new AuctionContext();
 
+
+        public PartialViewResult List()
+        {
+            var list = db.Cateparents.Include(c=>c.cates).ToList();
+            return PartialView("ListPartial", list);
+        }
         // GET: /Cateparent/
         public ActionResult Index()
         {

@@ -168,7 +168,7 @@ namespace auctionwebsite.Controllers
                 return View();
             }
         }
-         [CheckLogin]
+        [CheckLogin]
         public ActionResult Logout()
         {
             CurrentContext.Destroy();
@@ -178,6 +178,36 @@ namespace auctionwebsite.Controllers
          public ActionResult Summary()
          {
              return View();
+         }
+         [CheckLogin]
+         public ActionResult FollowList()
+         {
+             var User = CurrentContext.GetCurUser();
+             var products = db.Products.Where(s => s.Favorites.Any(f => f.UserID == User.UserID));
+             //var products = db.Products.Include(p=>p.Favorites).Where(p=>User.UserID.Equals(p.UserID));
+             return View(products.ToList());
+         }
+        [HttpPost] 
+        public JsonResult DeleteFavProduct(int id)
+         {
+             try
+             {
+                 var User = CurrentContext.GetCurUser();
+                 Favorite temp = db.Favorites.Where(x => x.ProductID == id && x.UserID==User.UserID).FirstOrDefault();
+                 if (temp == null)
+                 {
+                     Response.StatusCode = (int)HttpStatusCode.NotFound;
+                     return Json(new { Result = "Error" });
+                 }
+                 //Remove from database
+                 db.Favorites.Remove(temp);
+                 db.SaveChanges();
+                 return Json(new { Result = "OK" });
+             }
+             catch (Exception ex)
+             {
+                 return Json(new { Result = "ERROR", Message = ex.Message });
+             }
          }
 
     }

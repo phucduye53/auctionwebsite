@@ -22,7 +22,7 @@ namespace auctionwebsite.Controllers
         public ActionResult Index()
         {
             var User = CurrentContext.GetCurUser();
-            var products = db.Products.Where(u=>u.UserUploadID==User.UserID);
+            var products = db.Products.Where(u=>u.UserID==User.UserID);
             return View(products.ToList());
         }
 
@@ -34,10 +34,26 @@ namespace auctionwebsite.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = db.Products.Include(s => s.FileDetails).Include(s=>s.User).Include(p=>p.Favorites).SingleOrDefault(x => x.ProductID == id);
             if (product == null)
             {
                 return HttpNotFound();
+            }
+            if(CurrentContext.IsLogged()==true)
+            {
+                var User = CurrentContext.GetCurUser();
+                var temp = 0;
+                foreach(var item in product.Favorites)
+                {
+                    if(item.UserID==User.UserID)
+                    {
+                        temp++;
+                    }
+                }
+                if(temp==0)
+                {
+                    ViewBag.Count = temp;
+                }
             }
             return View(product);
         }
@@ -56,7 +72,7 @@ namespace auctionwebsite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CheckLogin]
-        public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserUploadID,ProductPointRequired")] Product product, HttpPostedFileBase fileMainInput, List<HttpPostedFileBase> fileSubInput)
+        public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, HttpPostedFileBase fileMainInput, List<HttpPostedFileBase> fileSubInput)
         {
             if(fileMainInput == null)
             {
@@ -122,7 +138,7 @@ namespace auctionwebsite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CheckLogin]
-                public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserUploadID,ProductPointRequired")] Product product, List<HttpPostedFileBase> fileSubInput)
+                public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, List<HttpPostedFileBase> fileSubInput)
                 {
                     if (ModelState.IsValid)
                     {
@@ -163,7 +179,7 @@ namespace auctionwebsite.Controllers
                 }
 
         // GET: /Product/Delete/5
-                [CheckLogin]
+        [CheckLogin]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -234,5 +250,64 @@ namespace auctionwebsite.Controllers
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
         }
+        [HttpPost]
+        public JsonResult Favorite(int userid, int proid)
+        {
+            try
+            {
+                var temp = db.Favorites.Where(x => x.UserID == userid).Where(u => u.ProductID == proid).ToList();
+                if(temp.Count>0)
+                {
+                    return Json(new { Result = "Exist" });
+                }
+                Favorite fav = new Favorite()
+                {
+                    UserID=userid,
+                    ProductID=proid
+                };
+                db.Entry(fav).State = EntityState.Added;
+                db.SaveChanges();
+                return Json(new { Result = "OK" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+         [HttpPost]
+        public PartialViewResult Bidding(int userid, int proid, int price)
+        {
+            //try
+            //{
+                Product product = db.Products.Where(x => x.ProductID == proid).FirstOrDefault();
+                //if (product.ProductPrice > price)
+                //{
+                //        return Json(new { Result = "Lower" });
+                //}
+                product.ProductPrice = product.ProductPrice + product.ProductTickSize;
+                Bidding bid = new Bidding()
+                {
+                    UserID = userid,
+                    ProductID = proid,
+                    PriceBid = price,
+                    ProductBid = product.ProductPrice + product.ProductTickSize,
+                    DateBid = DateTime.Now.ToString()
+                };
+                db.Entry(product).State = EntityState.Modified;
+                db.Entry(bid).State = EntityState.Added;
+                db.SaveChanges();
+                return PartialView("DetailPartial", product);
+  
+            //}
+            //catch (Exception ex)
+            //{
+            //    return Json(new { Result = "ERROR", Message = ex.Message });
+            //}
+        }
+         public PartialViewResult LoadProduct(int? id)
+         {
+             Product product = db.Products.Include(s=>s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p=>p.Biddings).SingleOrDefault(x => x.ProductID == id);
+             return PartialView("DetailPartial", product);
+         }
     }
 }

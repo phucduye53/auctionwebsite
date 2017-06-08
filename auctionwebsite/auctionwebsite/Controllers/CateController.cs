@@ -16,6 +16,8 @@ namespace auctionwebsite.Controllers.Admin
     {
         private AuctionContext db = new AuctionContext();
 
+
+
         // GET: /Cate/
         public ActionResult Index(string searchString,int? page=1)
         {
@@ -49,6 +51,7 @@ namespace auctionwebsite.Controllers.Admin
             }
             return View(cates);
         }
+
 
         // GET: /Cate/Details/5
         public ActionResult Details(int? id)
