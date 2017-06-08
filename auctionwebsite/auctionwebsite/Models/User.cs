@@ -45,6 +45,10 @@ namespace auctionwebsite.Models
         {
             get { return UserFirstName + " " + UserLastName; }
         }
+        public virtual ICollection<Product> Products { get; set; }
 
+        public virtual ICollection<Favorite> Favorites { get; set; }
+
+        public virtual ICollection<Bidding> Biddings { get; set; }
     }
 }
