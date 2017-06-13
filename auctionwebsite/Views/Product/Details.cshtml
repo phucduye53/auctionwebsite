@@ -1,0 +1,103 @@
+﻿@model auctionwebsite.Models.Product
+@using auctionwebsite.Helpers
+@{
+    ViewBag.Title = "Chi tiết";
+    Layout = "~/Views/Shared/home_layout.cshtml";
+}
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="products.html">Sản phẩm</a> <span class="divider">/</span></li>
+        <li class="active">Chi tiết sản phẩm</li>
+    </ul>
+    <div class="row" id="grid">
+        @{
+            Html.RenderAction("LoadProduct");
+        }
+    </div>
+</div>
+          </div>
+
+	</div>
+</div>
+</div> </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#grid').on("click", "#bidButton", function (e) {
+                if ($("#bidPrice").val() > $("#ProductPrice").val()) {
+                    $.ajax({
+                        url: '@Url.Action("Bidding")',
+                        type: "post",
+                        data: {
+                            userid: $("#UserID").val(),
+                            proid: $("#ProductID").val(),
+                            price: $("#bidPrice").val()
+                        }
+                    })
+                    .done(function (result) {
+                        $("#grid").html(result);
+                    });
+                } else {
+                    alert('Số tiền đấu giá không được nhỏ hơn số tiền hiện tại của sản phẩm');
+                }
+
+            });
+        $('#LikeButton').click(function () {
+            var temp = '@ViewBag.Count';
+            if (temp == 0) {
+                if (confirm('Bạn có muốn thêm sản phẩm vào danh mục ưa thích ?')) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Favorite")',
+                        dataType: 'json',
+                        data: {
+                            userid: $("#UserID").val(),
+                            proid: $("#ProductID").val()
+                        },
+                        success: function (data) {
+                            if (data.Result == "OK") {
+                                alert("Thêm thành công");
+                            } else {
+                                alert("Sản phẩm đã có trong danh sách theo dõi")
+                            }
+                        },
+                        error: function (ex) {
+                            alert("Fail " + ex.Message);
+                        }
+                    });
+                }
+            } else {
+                alert("Sản phẩm đã có trong danh sách theo dõi");
+            }
+          
+        });
+        $('#UnLikeButton').click(function () {
+            alert('Bạn phải đăng nhập để thực hiện chức năng này');
+        });
+        $('#unbidButton').click(function () {
+            alert('Bạn phải đăng nhập để thực hiện chức năng này');
+        });
+        $('#clock').countdown('@Model.ProductDateSold')
+         .on('update.countdown', function (event) {
+             var format = '%H:%M:%S';
+             if (event.offset.totalDays > 0) {
+                 format = '%-d Ngày %!d ' + format;
+             }
+             if (event.offset.weeks > 0) {
+                 format = '%-w Tuần %!w ' + format;
+             }
+             $(this).html(event.strftime(format));
+         })
+    .on('finish.countdown', function (event) {
+        $('#bidButton').prop('disabled', true);
+    });
+
+
+    });
+</script>
+}

@@ -1,0 +1,214 @@
+﻿@model auctionwebsite.Models.Product
+@using auctionwebsite.Helpers
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/user_layout.cshtml";
+}
+<!DOCTYPE html>
+<style>
+    input[type="file"] {
+        display: block;
+    }
+
+    .imageThumb {
+        max-height: 75px;
+        border: 2px solid;
+        padding: 1px;
+        cursor: pointer;
+    }
+
+    .pip {
+        display: inline-block;
+        margin: 10px 10px 0 0;
+    }
+
+    .remove {
+        display: block;
+        background: #444;
+        border: 1px solid black;
+        color: white;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .remove:hover {
+            background: white;
+            color: black;
+        }
+</style>
+
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="products.html">Tài khoản</a> <span class="divider">/</span></li>
+        <li class="active">Đấu giá sản phẩm</li>
+    </ul>
+    </ul>
+    <h3>Đấu giá</h3>
+    <hr class="soft" />
+    <div class="well">
+        @if (ViewBag.Errormsg != null)
+        {
+            <div class="alert alert-error">
+                @ViewBag.Errormsg
+            </div>
+        }
+        @using (Html.BeginForm("Create", "Product", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true)
+                <div class="control-group">
+                    <label class="control-label">Danh mục tổng hợp<sup>*</sup></label>
+                    <div class="controls">
+                        @Html.DropDownList("CateparentID", String.Empty)
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Danh mục<sup>*</sup></label>
+                    <div class="controls">
+                        @Html.DropDownList("CateID", new SelectList(string.Empty, "CateID", "CateName"), "Hãy chọn danh mục tổng hợp")
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Tên sản phẩm <sup>*</sup></label>
+                    <div class="controls">
+                        @Html.EditorFor(model => model.ProductName)
+                        @Html.ValidationMessageFor(model => model.ProductName, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Giá sản phẩm <sup>*</sup></label>
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.ProductPrice)
+                        @Html.ValidationMessageFor(model => model.ProductPrice, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Giá mua liền sản phẩm <sup>*</sup></label>
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.ProductSoldInstantPrice)
+                        @Html.ValidationMessageFor(model => model.ProductSoldInstantPrice, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Bước giá <sup>*</sup></label>
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.ProductTickSize)
+                        @Html.ValidationMessageFor(model => model.ProductTickSize, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputLname">Ngày kết thúc đấu giá  <sup>*</sup></label>
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.ProductDateSold, new { @class = "datepicker" })
+                        @Html.ValidationMessageFor(model => model.ProductDateSold)
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputLname">Điểm tham gia đấu giá </label>
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.ProductPointRequired, new { @Value = "100" }) %
+                        @Html.ValidationMessageFor(model => model.ProductPointRequired)
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="textarea">Mô tả</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(model => model.ProductDes, new { @cols = "80", @rows = "4", @class = "input-xxlarge" })
+                        @Html.ValidationMessageFor(model => model.ProductDes, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Hình ảnh *</label>
+                    <div class="controls">
+                        <input class="input-file" accept="image/*" id="fileMainInput" name="fileMainInput" type="file" onchange="readURL(this);" />
+                        <img id="temp" />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <button type="button" class="btn btn-primary" id="addImages">Thêm ảnh phụ</button>
+                    <div id="insert" style="display: none;">
+                        <div class="control-group">
+                            <label class="control-label">Hình ảnh phụ*</label>
+                            <div class="controls">
+                                <input accept="image/*" id="fileSubInput" name="fileSubInput" type="file" onchange="readURL1(this);" multiple="multiple">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <p><sup>*</sup>Các trường cần thiết phải nhập</p>
+
+                <div class="control-group">
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.UserID, new { @Value = @CurrentContext.GetCurUser().UserID, style = "display: none;" })
+                        <input class="btn btn-large btn-success" type="submit" value="Đăng ký đấu giá" />
+                    </div>
+                </div>
+            </div>
+        }
+
+     </div>
+    </div>
+</div></div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var counter = 1;
+        $('#addImages').click(function () {
+            $("#insert").toggle();
+        });
+
+        $('#CateparentID').change(function () {
+            $("#CateID").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetCates")',
+                dataType: 'json',
+                data: { id: $("#CateparentID").val() },
+                success: function (Cates) {
+                    $.each(Cates, function (i, cate) {
+                        $('#CateID').append('<option value="' + cate.Value + '">' + cate.Text + '</option>');
+                    });
+                },
+                error:function(ex){
+                alert("Fail" +ex);
+                 }
+        });
+        return false;
+        });
+        $('.datepicker').datetimepicker();
+        if (window.File && window.FileList && window.FileReader) {
+            $("#fileSubInput").on("change", function (e) {
+                    var files = e.target.files,
+                      filesLength = files.length;
+                    for (var i = 0; i < filesLength; i++) {
+                        var f = files[i]
+                        var fileReader = new FileReader();
+                        fileReader.onload = (function (e) {
+                            var file = e.target;
+                            $("<span class=\"pip\">" +
+                              "<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
+                              "<br/><span class=\"remove\">Xóa ảnh</span>" +
+                              "</span>").insertAfter("#fileSubInput");
+                            $(".remove").click(function () {
+                                $(this).parent(".pip").remove();
+                            });
+                        });
+                        fileReader.readAsDataURL(f);
+                    }
+                });
+        } else {
+            alert("Your browser doesn't support to File API")
+        }
+  
+    });
+    </script>
+}
