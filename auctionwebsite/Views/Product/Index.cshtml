@@ -1,0 +1,64 @@
+﻿@model IEnumerable<auctionwebsite.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/user_layout.cshtml";
+}
+
+<!DOCTYPE html>
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="products.html">Tài khoản</a> <span class="divider">/</span></li>
+        <li class="active">Sản phẩm của tôi đã đăng</li>
+    </ul>
+    </ul>
+    <h3>Sản phẩm của tôi đã đăng[<small>@Model.Count() sản phẩm</small>]</h3>
+    <hr class="soft"/>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Chi tiết</th>
+                <th>Người mua giá cao nhất</th>
+                <th>Giá hiện tại</th>
+                <th>Giá khởi điểm</th>
+                <th>Trạng thái</th>
+                <th>Hủy đấu giá</th>
+                <th>Chỉnh sửa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+              <tr>
+                <td><a href=""> <img width="60" src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="" /></a></td>
+                <td>@item.ProductDes<br /></td>
+                <td>0</td> @*user highest price buy*@
+                <td>$120.00</td> @*highest price*@
+                <td>@item.ProductPrice</td>
+                  @if(@item.ProductStatus == 0 )
+                  {
+                    <td>Đang chờ xác nhận</td>
+                  }
+                  @if (@item.ProductStatus == 1)
+                  {
+                      <td>Đang đấu giá</td>
+                  }
+                  @if (@item.ProductStatus == 2)
+                  {
+                      <td>Đấu giá thành công</td>
+                  }
+                  @if (@item.ProductStatus == 3)
+                  {
+                      <td>Đấu giá đã hủy</td>
+                  }        
+                <td><button><i class="icon-remove icon-white"></i></button>	</td>
+                <td><a href="#">Sửa</a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</div></div>
+</div>
