@@ -1,0 +1,35 @@
+﻿@model auctionwebsite.Models.Cate
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin_layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Cate</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cateparent.CateparentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cateparent.CateparentName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CateName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CateName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CateID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
