@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CaptchaMvc">
+      <HintPath>..\packages\CaptchaMvc.Mvc4.1.5.0\lib\net40-full\CaptchaMvc.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -148,6 +151,7 @@
     <Compile Include="Models\FileDetail.cs" />
     <Compile Include="Models\LoginUser.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Rate.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -510,7 +514,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\admin_layout.cshtml" />
     <Content Include="Views\Admin\Dashboard.cshtml" />
@@ -543,8 +549,12 @@
     <Content Include="Views\Cateparent\ListPartial.cshtml" />
     <Content Include="Views\User\FollowList.cshtml" />
     <Content Include="Views\Product\DetailPartial.cshtml" />
+    <Content Include="Views\User\BiddingList.cshtml" />
+    <Content Include="Views\Admin\UserEdit.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
