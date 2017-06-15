@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using auctionwebsite.Models;
 using auctionwebsite.DAL;
 using PagedList;
+using auctionwebsite.Helpers;
 
 namespace auctionwebsite.Controllers.Admin
 {
@@ -19,6 +20,7 @@ namespace auctionwebsite.Controllers.Admin
 
 
         // GET: /Cate/
+                [CheckLogin(Permission = 1)]
         public ActionResult Index(string searchString,int? page=1)
         {
             int n = db.Cates.Count();
@@ -54,6 +56,7 @@ namespace auctionwebsite.Controllers.Admin
 
 
         // GET: /Cate/Details/5
+                [CheckLogin(Permission = 1)]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -69,6 +72,7 @@ namespace auctionwebsite.Controllers.Admin
         }
 
         // GET: /Cate/Create
+                [CheckLogin(Permission = 1)]
         public ActionResult Create()
         {
             ViewBag.CateparentID = new SelectList(db.Cateparents, "CateparentID", "CateparentName");
@@ -80,6 +84,7 @@ namespace auctionwebsite.Controllers.Admin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CheckLogin(Permission = 1)]
         public ActionResult Create([Bind(Include="CateID,CateName,CateparentID")] Cate cate)
         {
             if (ModelState.IsValid)
@@ -94,6 +99,7 @@ namespace auctionwebsite.Controllers.Admin
         }
 
         // GET: /Cate/Edit/5
+        [CheckLogin(Permission = 1)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -114,6 +120,7 @@ namespace auctionwebsite.Controllers.Admin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CheckLogin(Permission = 1)]
         public ActionResult Edit([Bind(Include="CateID,CateName,CateparentID")] Cate cate)
         {
             if (ModelState.IsValid)
@@ -125,7 +132,7 @@ namespace auctionwebsite.Controllers.Admin
             ViewBag.CateparentID = new SelectList(db.Cateparents, "CateparentID", "CateparentName", cate.CateparentID);
             return View(cate);
         }
-
+        [CheckLogin(Permission = 1)]
         // GET: /Cate/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -144,6 +151,7 @@ namespace auctionwebsite.Controllers.Admin
         // POST: /Cate/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [CheckLogin(Permission = 1)]
         public ActionResult DeleteConfirmed(int id)
         {
             Cate cate = db.Cates.Find(id);

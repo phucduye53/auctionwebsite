@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using auctionwebsite.Models;
 using auctionwebsite.DAL;
 using PagedList;
+using auctionwebsite.Helpers;
 
 namespace auctionwebsite.Controllers.Admin
 {
@@ -23,12 +24,14 @@ namespace auctionwebsite.Controllers.Admin
             return PartialView("ListPartial", list);
         }
         // GET: /Cateparent/
+                [CheckLogin(Permission = 1)]
         public ActionResult Index()
         {
             return View(db.Cateparents.ToList());
         }
 
         // GET: /Cateparent/Details/5
+                [CheckLogin(Permission = 1)]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -44,6 +47,7 @@ namespace auctionwebsite.Controllers.Admin
         }
 
         // GET: /Cateparent/Create
+                [CheckLogin(Permission = 1)]
         public ActionResult Create()
         {
             return View();
@@ -54,6 +58,7 @@ namespace auctionwebsite.Controllers.Admin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CheckLogin(Permission = 1)]
         public ActionResult Create([Bind(Include="CateparentID,CateparentName")] Cateparent cateparent)
         {
             if (ModelState.IsValid)
@@ -67,6 +72,7 @@ namespace auctionwebsite.Controllers.Admin
         }
 
         // GET: /Cateparent/Edit/5
+                [CheckLogin(Permission = 1)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -86,6 +92,7 @@ namespace auctionwebsite.Controllers.Admin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CheckLogin(Permission = 1)]
         public ActionResult Edit([Bind(Include="CateparentID,CateparentName")] Cateparent cateparent)
         {
             if (ModelState.IsValid)
@@ -98,6 +105,7 @@ namespace auctionwebsite.Controllers.Admin
         }
 
         // GET: /Cateparent/Delete/5
+                [CheckLogin(Permission = 1)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -115,6 +123,7 @@ namespace auctionwebsite.Controllers.Admin
         // POST: /Cateparent/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [CheckLogin(Permission = 1)]
         public ActionResult DeleteConfirmed(int id)
         {
             Cateparent cateparent = db.Cateparents.Find(id);

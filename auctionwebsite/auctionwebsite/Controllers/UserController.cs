@@ -7,6 +7,8 @@ using auctionwebsite.DAL;
 using System.Web.Security;
 using auctionwebsite.Helpers;
 using System;
+using CaptchaMvc.HtmlHelpers;  
+
 
 namespace auctionwebsite.Controllers
 {
@@ -15,14 +17,13 @@ namespace auctionwebsite.Controllers
         private AuctionContext db = new AuctionContext();
 
         // GET: /User/
-            [CheckLogin]
+        [CheckLogin(Permission = 0)]
         public ActionResult Index()
         {
             return View(db.Users.ToList());
         }
 
         // GET: /User/Details/5
-            [CheckLogin]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -50,20 +51,24 @@ namespace auctionwebsite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="UserID,UserName,UserPassword,ConfirmPassword,Password,UserLevel,UserEmail,UserFirstName,UserLastName,UserDOB,UserAddress,UserCity")] User user)
         {
-            if (ModelState.IsValid)
+            if (this.IsCaptchaValid("Captcha is not valid"))
             {
-                user.UserCash = 1000;
-                user.Password = Helpers.Helpers.EncodePasswordMd5(user.UserPassword);
-                db.Users.Add(user);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    user.UserCash = 1000;
+                    user.Password = Helpers.Helpers.EncodePasswordMd5(user.UserPassword);
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    TempData["message"] = "Đăng ký thành công";
+                    return RedirectToAction("Login");
+                }
             }
-
+            ViewBag.ErrMessage = "Mã captcha không đúng";
             return View(user);
         }
 
         // GET: /User/Edit/5
-            [CheckLogin]
+        [CheckLogin(Permission = 0)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -83,11 +88,16 @@ namespace auctionwebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [CheckLogin]
-        public ActionResult Edit([Bind(Include = "UserID,UserName,UserPassword,ConfirmPassword,Password,UserEmail,UserLevel,UserFirstName,UserLastName,UserDOB,UserAddress,UserCity")] User user)
+        [CheckLogin(Permission = 0)]
+        public ActionResult Edit([Bind(Include = "UserID,OldPassword,UserName,UserPassword,ConfirmPassword,Password,UserEmail,UserLevel,UserFirstName,UserLastName,UserDOB,UserAddress,UserCity")] User user)
         {
             if (ModelState.IsValid)
             {
+                if (Helpers.Helpers.EncodePasswordMd5(user.OldPassword)!=user.Password)
+                {
+                    ViewBag.Errormsg = "Mật khẩu cũ nhập không đúng ";
+                    return View(user);
+                }
                 user.Password = Helpers.Helpers.EncodePasswordMd5(user.UserPassword);
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
@@ -97,7 +107,7 @@ namespace auctionwebsite.Controllers
         }
 
         // GET: /User/Delete/5
-            [CheckLogin]
+        [CheckLogin]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -199,7 +209,6 @@ namespace auctionwebsite.Controllers
                      Response.StatusCode = (int)HttpStatusCode.NotFound;
                      return Json(new { Result = "Error" });
                  }
-                 //Remove from database
                  db.Favorites.Remove(temp);
                  db.SaveChanges();
                  return Json(new { Result = "OK" });
@@ -209,6 +218,96 @@ namespace auctionwebsite.Controllers
                  return Json(new { Result = "ERROR", Message = ex.Message });
              }
          }
+        [CheckLogin]
+        public ActionResult BiddingList()
+        {
+            var User = CurrentContext.GetCurUser();
+            var products = db.Biddings.GroupBy(p => p.UserID).Select(t => t.OrderByDescending(p => p.ProductBid).FirstOrDefault()).Where(p=>p.UserID==User.UserID);
+            //var products = db.Products.Include(p=>p.Favorites).Where(p=>User.UserID.Equals(p.UserID));
+            return View(products.ToList());
+        }
+        [HttpPost] 
+        public ActionResult RateLikeUser(int userid,int targetid,string text,int proid)
+        {
+            try
+            {
+                var User = CurrentContext.GetCurUser();
+                Rate temp = db.Rates.Where(p => p.UserID == userid && p.UserTargetID == targetid).FirstOrDefault();
+                Product product = db.Products.Include(s => s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p => p.Biddings).SingleOrDefault(x => x.ProductID == proid);
+                if (temp != null)
+                {
+                    if(temp.RateStatus==0)
+                    {
+                        return Json(new { Result = "Exist" });
+                    }
+                    temp.RateStatus = 0;
+                    temp.RateComment = text;
+                    temp.Date = DateTime.Now.ToString();
+                    db.Entry(temp).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return PartialView("~/Views/Product/DetailPartial", product);
+                }
+                else
+                {
+                    Rate rate = new Rate()
+                    {
+                        UserID = userid,
+                        UserTargetID = targetid,
+                        RateStatus = 0,
+                        RateComment = text,
+                        Date = DateTime.Now.ToString()
+                    };
+                    db.Rates.Add(rate);
+                    db.SaveChanges();
+                    return PartialView("~/Views/Product/DetailPartial", product);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+        [HttpPost]
+        public ActionResult RateDisLikeUser(int userid, int targetid, string text,int proid)
+        {
+            try
+            {
+                var User = CurrentContext.GetCurUser();
+                Product product = db.Products.Include(s => s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p => p.Biddings).SingleOrDefault(x => x.ProductID == proid);
+                Rate temp = db.Rates.Where(p => p.UserID == userid && p.UserTargetID == targetid).FirstOrDefault();
+                if (temp != null)
+                {
+                    if (temp.RateStatus == 1)
+                    {
+                        return Json(new { Result = "Exist" });
+                    }
+                    temp.RateStatus = 1;
+                    temp.RateComment = text;
+                    temp.Date = DateTime.Now.ToString();
+                    db.Entry(temp).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return PartialView("~/Views/Product/DetailPartial", product);
+                }
+                else
+                {
+                    Rate rate = new Rate()
+                    {
+                        UserID = userid,
+                        UserTargetID = targetid,
+                        RateStatus = 1,
+                        RateComment = text,
+                        Date = DateTime.Now.ToString()
+                    };
+                    db.Rates.Add(rate);
+                    db.SaveChanges();
+                    return PartialView("~/Views/Product/DetailPartial", product);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
 
     }
 }

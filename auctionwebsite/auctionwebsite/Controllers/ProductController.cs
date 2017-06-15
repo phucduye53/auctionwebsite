@@ -18,7 +18,7 @@ namespace auctionwebsite.Controllers
         private AuctionContext db = new AuctionContext();
 
         // GET: /Product/
-        [CheckLogin]
+        [CheckLogin(Permission=0)]
         public ActionResult Index()
         {
             var User = CurrentContext.GetCurUser();
@@ -27,7 +27,6 @@ namespace auctionwebsite.Controllers
         }
 
         // GET: /Product/Details/5
-
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -59,7 +58,7 @@ namespace auctionwebsite.Controllers
         }
 
         // GET: /Product/Create
-        [CheckLogin]
+        [CheckLogin(Permission = 0)]
         public ActionResult Create()
         {
             ViewBag.CateParentID = new SelectList(db.Cateparents, "CateparentID", "CateparentName");
@@ -71,7 +70,7 @@ namespace auctionwebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [CheckLogin]
+        [CheckLogin(Permission = 0)]
         public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, HttpPostedFileBase fileMainInput, List<HttpPostedFileBase> fileSubInput)
         {
             if(fileMainInput == null)
@@ -113,7 +112,7 @@ namespace auctionwebsite.Controllers
         }
 
         // GET: /Product/Edit/5
-                [CheckLogin]
+             [CheckLogin(Permission = 0)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -137,7 +136,7 @@ namespace auctionwebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [CheckLogin]
+        [CheckLogin(Permission = 0)]
                 public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, List<HttpPostedFileBase> fileSubInput)
                 {
                     if (ModelState.IsValid)
@@ -179,7 +178,7 @@ namespace auctionwebsite.Controllers
                 }
 
         // GET: /Product/Delete/5
-        [CheckLogin]
+        [CheckLogin(Permission = 0)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -197,7 +196,7 @@ namespace auctionwebsite.Controllers
         // POST: /Product/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [CheckLogin]
+        [CheckLogin(Permission = 0)]
         public ActionResult DeleteConfirmed(int id)
         {
             Product product = db.Products.Find(id);
@@ -214,6 +213,7 @@ namespace auctionwebsite.Controllers
             }
             base.Dispose(disposing);
         }
+        [CheckLogin(Permission = 0)]
         public JsonResult GetCates(int id) 
         {
             List<Cate> Cates = new List<Cate>();
@@ -223,6 +223,7 @@ namespace auctionwebsite.Controllers
             return Json(new SelectList(Cates, "CateID", "CateName"));
         }
         [HttpPost]
+        [CheckLogin(Permission = 0)]
         public JsonResult DeleteFile(int id)
         {
             try
@@ -251,6 +252,7 @@ namespace auctionwebsite.Controllers
             }
         }
         [HttpPost]
+        [CheckLogin(Permission = 0)]
         public JsonResult Favorite(int userid, int proid)
         {
             try
@@ -274,40 +276,72 @@ namespace auctionwebsite.Controllers
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
         }
-         [HttpPost]
+        [HttpPost]
+        [CheckLogin(Permission = 0)]
         public PartialViewResult Bidding(int userid, int proid, int price)
         {
             //try
             //{
-                Product product = db.Products.Where(x => x.ProductID == proid).FirstOrDefault();
-                //if (product.ProductPrice > price)
-                //{
-                //        return Json(new { Result = "Lower" });
-                //}
-                product.ProductPrice = product.ProductPrice + product.ProductTickSize;
-                Bidding bid = new Bidding()
-                {
-                    UserID = userid,
-                    ProductID = proid,
-                    PriceBid = price,
-                    ProductBid = product.ProductPrice + product.ProductTickSize,
-                    DateBid = DateTime.Now.ToString()
-                };
-                db.Entry(product).State = EntityState.Modified;
-                db.Entry(bid).State = EntityState.Added;
-                db.SaveChanges();
-                return PartialView("DetailPartial", product);
-  
+            Product product = db.Products.Include(s => s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p => p.Biddings).SingleOrDefault(x => x.ProductID == proid);
+            //if (product.ProductPrice > price)
+            //{
+            //        return Json(new { Result = "Lower" });
+            //}
+            product.ProductPrice = product.ProductPrice + product.ProductTickSize;
+            Bidding bid = new Bidding()
+            {
+                UserID = userid,
+                ProductID = proid,
+                PriceBid = price,
+                ProductBid = product.ProductPrice + product.ProductTickSize,
+                DateBid = DateTime.Now.ToString()
+            };
+            db.Entry(product).State = EntityState.Modified;
+            db.Entry(bid).State = EntityState.Added;
+            db.SaveChanges();
+            return PartialView("DetailPartial", product);
+
             //}
             //catch (Exception ex)
             //{
             //    return Json(new { Result = "ERROR", Message = ex.Message });
             //}
         }
-         public PartialViewResult LoadProduct(int? id)
-         {
-             Product product = db.Products.Include(s=>s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p=>p.Biddings).SingleOrDefault(x => x.ProductID == id);
-             return PartialView("DetailPartial", product);
-         }
+        public PartialViewResult LoadProduct(int? id)
+        {
+            Product product = db.Products.Include(s => s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p => p.Biddings).SingleOrDefault(x => x.ProductID == id);
+            return PartialView("DetailPartial", product);
+        }
+        [HttpPost]
+
+        public PartialViewResult KickUser(int userid, int proid)
+        {
+            var bidding = db.Biddings.Where(x => x.ProductID == proid && x.UserID == userid).ToList();
+            Product product = db.Products.Include(s => s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p => p.Biddings).SingleOrDefault(x => x.ProductID == proid);
+            foreach (var item in bidding)
+            {
+                item.BidStatus = 1;
+                db.Entry(item).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            int max = db.Biddings.Where(p=>p.BidStatus==0).Max(x=>x.PriceBid);
+            if(max < product.ProductPrice)
+            {
+                product.ProductPrice = max;
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return PartialView("DetailPartial", product);
+        }
+        [HttpPost]
+        public PartialViewResult BidOver(int proid)
+        {
+            Product product = db.Products.Include(s => s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p => p.Biddings).SingleOrDefault(x => x.ProductID == proid);
+            product.ProductStatus = 3;
+            db.Entry(product).State = EntityState.Modified;
+            db.SaveChanges();
+            return PartialView("DetailPartial", product);
+        }
     }
 }
