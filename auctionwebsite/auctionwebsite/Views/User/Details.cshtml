@@ -1,91 +1,149 @@
 ﻿@model auctionwebsite.Models.User
-
+@using auctionwebsite.Helpers
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/home_layout.cshtml";
 }
 
-<h2>Details</h2>
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href='@Url.Action("Index","Home")'>Trang chủ</a> <span class="divider">/</span></li>
+        <li class="active">Chi tiết người dùng</li>
+    </ul>
+    <div class="row">
+        <div class="span9">
+            <h3>@Model.UserFullName</h3>
+            <h4>@Model.UserName</h4>
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    @if (CurrentContext.IsLogged() == true)
+                    {
+                        <a href="#like" class="btn" data-toggle="modal"><i class="icon-thumbs-up"></i>@Model.RateTargetUser.Where(p => p.RateStatus == 0).Count()</a>
+                        <div id="like" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3>Nhận xét người dùng (Đánh giá tích cực)</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="control-group">
+                                    <input type="text" id="inputTxt" placeholder="Ghi nhận xét vào đây">
+                                </div>
+                                <button id="rateLike" type="submit" class="btn btn-success">Gửi</button>
+                            </div>
+                        </div>
+                        <a href="#dislike" class="btn" data-toggle="modal"><i class="icon-thumbs-down"></i>@Model.RateTargetUser.Where(p => p.RateStatus == 1).Count()</a>
+                        <div id="dislike" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3>Nhận xét người dùng ( Đánh giá không tích cực )</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="control-group">
+                                    <input type="text" id="inputDisLikeTxt" placeholder="Ghi nhận xét vào đây">
+                                </div>
+                                <button id="rateDisLike" type="submit" class="btn btn-success">Gửi</button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <button id="unlograteLike" class="btn" data-toggle="modal"><i class="icon-thumbs-up"></i>@Model.RateTargetUser.Where(p => p.RateStatus == 0).Count()</button>
+                        <button id="unlograteDisLike" class="btn" data-toggle="modal"><i class="icon-thumbs-down"></i>@Model.RateTargetUser.Where(p => p.RateStatus == 1).Count()</button>
+                    }
+                </div>
+            </div>
+                    <hr class="soft" />
+                    <h4>Sản phẩm</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Chi tiết</th>
+                        <th>Giá hiện tại</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td><a href='@Url.Action("Details", "Product", new { id = item.ProductID })'> <img width="60" src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="" /></a></td>
+                            <td>@item.ProductDes<br /></td>
+                            <td>@item.ProductPrice</td>
+                            @if (@item.ProductStatus == 0)
+                            {
+                                <td>Đang chờ xác nhận</td>
+                            }
+                            @if (@item.ProductStatus == 1)
+                            {
+                                <td>Đang đấu giá</td>
+                            }
+                            @if (@item.ProductStatus == 2)
+                            {
+                                <td>Đấu giá thành công</td>
+                            }
+                            @if (@item.ProductStatus == 3)
+                            {
+                                <td>Đấu giá đã hủy</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+                    <hr class="soft" />
+                    <h4>Các lượt đánh giá</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Người dùng</th>
+                        <th>Đánh giá</th>
+                        <th>Lời nhắn</th>
+                        <th>Thời điểm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var stt = 1;
+                    }
+                    @foreach (var item in Model.RateTargetUser)
+                    {
+                        <tr>
+                            <td>@stt</td>
+                            <td><a href='@Url.Action("Details", "User", new { id=item.User.UserID })'>@item.User.UserName</a></td>
+                            @if (@item.RateStatus == 0)
+                            {
+                                <td>Tích cực</td>
+                            }
+                            @if (@item.RateStatus == 1)
+                            {
+                                <td>Không tích cực</td>
+                            }
+                            <td>@item.RateComment</td>
+                            <td>@item.Date</td>
+                        </tr>
+                        stt++;
+                    }
+                </tbody>
+            </table>
+                    <hr class="soft clr" />
+                    <br class="clr" />
+                    <hr class="soft" />
+        </div>
 
-<div>
-    <h4>User</h4>
-	<hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserLevel)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserLevel)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserEmail)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserEmail)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserFirstName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserFirstName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserLastName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserLastName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserDOB)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserDOB)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserAddress)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserAddress)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserCity)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserCity)
-        </dd>
-
-    </dl>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.UserID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<hr class="soft" />
+			</div>
+		</div>
+<br class="clr">
+					 </div>
+		</div>
+          </div>
+
+	</div>
+</div>
+</div> </div>
+</div>

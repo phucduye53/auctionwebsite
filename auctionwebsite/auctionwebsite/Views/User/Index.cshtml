@@ -23,7 +23,7 @@
                     @foreach (var item in Model)
                     {
                         <tr class="odd gradeX">
-                            <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                            <td><a href='@Url.Action("Details", "User", new { id=item.UserID })'>@item.UserName</a></td>
                             <td>@Html.DisplayFor(modelItem=>item.UserEmail)</td>
                             @if(item.UserLevel==0)
                             {

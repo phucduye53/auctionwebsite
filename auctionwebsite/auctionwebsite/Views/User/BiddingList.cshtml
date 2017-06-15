@@ -1,18 +1,18 @@
-﻿@model IEnumerable<auctionwebsite.Models.Product>
+﻿@model IEnumerable<auctionwebsite.Models.Bidding>
 @{
-    ViewBag.Title = "Sản phẩm đang theo dõi";
+    ViewBag.Title = "Sản phẩm đang đấu giá";
     Layout = "~/Views/Shared/user_layout.cshtml";
 }
 
 <!DOCTYPE html>
 <div class="span9">
     <ul class="breadcrumb">
-        <li><a href='@Url.Action("Index","Home")'>Trang chủ</a> <span class="divider">/</span></li>
-        <li><a href='@Url.Action("Summary","User")'>Tài khoản</a> <span class="divider">/</span></li>
-        <li class="active">Sản phẩm đang theo dõi</li>
+        <li><a href="@Url.Action("Index","Home")">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Summary","User")">Tài khoản</a> <span class="divider">/</span></li>
+        <li class="active">Sản phẩm đang đấu giá</li>
     </ul>
     </ul>
-    <h3>Sản phẩm đang theo dõi[<small>@Model.Count() sản phẩm</small>]</h3>
+    <h3>Sản phẩm đấu giá[<small>@Model.Count() sản phẩm</small>]</h3>
     <hr class="soft" />
     <table id="myTable" class="table table-bordered">
         <thead>
@@ -21,42 +21,49 @@
                 <th>Sản phẩm</th>
                 <th>Chi tiết</th>
                 <th>Giá hiện tại</th>
+                <th>Giá tôi đặt</th>
                 <th>Được đăng bởi</th>
                 <th>Trạng thái</th>
-                <th>Hủy theo dõi</th>
             </tr>
         </thead>
         <tbody>
             @{
                 var stt = 1;
-           }
+            }
             @foreach (var item in Model)
             {
                 <tr>
                     <td>@stt</td>
-                    <td><a href=""> <img width="60" src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="" /></a></td>
-                    <td>@item.ProductDes<br /></td>
-                    <td>@item.ProductPrice</td> @*highest price*@
-                    <td><a href='@Url.Action("Details", "User", new { id=item.User.UserID })'>@item.User.UserName</a></td>
-                    @if (@item.ProductStatus == 0)
+                    <td><a href='@Url.Action("Details", "Product", new { id = item.Product.ProductID })'> <img width="60" src="~/Img/@(item.Product.ProductID+"_"+item.Product.ProductPicName)" alt="" /></a></td>
+                    <td>@item.Product.ProductDes<br /></td>
+                    <td>@item.Product.ProductPrice</td> @*highest price*@
+                    @if (item.Product.ProductPrice==@item.PriceBid)
+                    {
+                     <td>@item.PriceBid VNĐ (Giữ giá cao nhất)</td>
+                    }
+                    else { 
+                       <td>@item.PriceBid</td>
+                    }
+ 
+                    <td>@item.User.UserName</td>
+                    @if (@item.Product.ProductStatus == 0)
                     {
                         <td>Đang chờ xác nhận</td>
                     }
-                    @if (@item.ProductStatus == 1)
+                    @if (@item.Product.ProductStatus == 1)
                     {
                         <td>Đang đấu giá</td>
                     }
-                    @if (@item.ProductStatus == 2)
+                    @if (@item.Product.ProductStatus == 2)
                     {
                         <td>Đấu giá thành công</td>
                     }
-                    @if (@item.ProductStatus == 3)
+                    @if (@item.Product.ProductStatus == 3)
                     {
                         <td>Đấu giá đã hủy</td>
                     }
-                    <td><button class="alert-danger" id="deleteProduct" data-id="@item.ProductID"><i class="icon-remove icon-white"></i></button></td>                  
                 </tr>
-                stt++;
+                    stt++;
             }
         </tbody>
     </table>
@@ -64,7 +71,7 @@
 </div></div>
 </div>
 @section Scripts{
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         $('.alert-danger').click(function () {
             var row = $(this).closest('tr').index();
             if (confirm('Bạn có muốn xóa khỏi danh sách theo dõi ?')) {
@@ -74,7 +81,7 @@
                     dataType: 'json',
                     data: { id: $(this).data('id') },
                     success: function (data) {
-                        document.getElementById("myTable").deleteRow(row+1);
+                        document.getElementById("myTable").deleteRow(row + 1);
                     },
                     error: function (ex) {
                         alert("Fail" + ex);
@@ -83,5 +90,5 @@
                 return false;
             }
         });
-    </script>
+    </script>*@
 }

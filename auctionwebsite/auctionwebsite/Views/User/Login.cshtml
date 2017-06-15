@@ -7,7 +7,7 @@
 
 <div class="span9">
     <ul class="breadcrumb">
-        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href='@Url.Action("Index","Home")'>Trang chủ</a> <span class="divider">/</span></li>
         <li class="active">Đăng nhập</li>
     </ul>
     <h3> Đăng nhập </h3>
@@ -17,6 +17,12 @@
            @ViewBag.Errormsg
         </div>
         }
+        @if (TempData["message"] != null)
+        {
+        <div class="alert alert-success">
+         @TempData["message"]
+        </div>
+         }
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()

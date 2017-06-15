@@ -1,5 +1,6 @@
 ﻿@model auctionwebsite.Models.User
-
+@using CaptchaMvc.HtmlHelpers;
+ 
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/home_layout.cshtml";
@@ -9,14 +10,20 @@
 
 <div class="span9">
 <ul class="breadcrumb">
-    <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Index","Home")">Trang chủ</a> <span class="divider">/</span></li>
     <li class="active">Đăng ký</li>
 </ul>
 <h3> Đăng ký tài khoản</h3>
 <div class="well">
-
+    @if (ViewBag.ErrMessage != null)
+    {
+        <div class="alert alert-error">
+            @ViewBag.ErrMessage
+        </div>
+    }
     @using (Html.BeginForm())
     {
+        
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
@@ -107,10 +114,18 @@
                     @Html.ValidationMessageFor(model => model.UserCity)
                 </div>
             </div>
+            <div class="control-group">
+                <label class="control-label" for="address">Captcha   <sup>*</sup></label>
+                <div class="controls">
+                    @Html.MathCaptcha()
+                </div>
+            </div>
+            
+            
             <p><sup>*</sup>Các trường cần thiết phải nhập</p>
             <div class="control-group">
                 <div class="controls">
-                    <input type="submit" value="Create" class="btn btn-large btn-success" />
+                    <input type="submit" value="Khởi tạo" class="btn btn-large btn-success" />
                 </div>
             </div>
         </div>
