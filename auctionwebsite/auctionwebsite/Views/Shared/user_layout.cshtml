@@ -73,7 +73,7 @@
                         <li class=""><a href="">Liên hệ</a></li>
                         @if (CurrentContext.IsLogged() == false)
                         {
-                            <li class=""><a href="">Đăng ký</a></li>
+                            <li class=""><a href='@Url.Action("Login","User")'>Đăng ký</a></li>
                             <li class="">
                                 <a href="#login" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
                                 <div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
@@ -103,7 +103,7 @@
                         else
                         {
                             <li class="">
-                                <a href="" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Tài khoản</span></a>
+                                <a href='@Url.Action("Summary", "User")' role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Tài khoản</span></a>
                             </li>
                             <li class="">
                                 <a href="@Url.Action("Logout","User")">Đăng xuất</a>
@@ -129,19 +129,10 @@
                                     <li class="nav-header">@CurrentContext.GetCurUser().UserFullName</li>
                                     <li class="divider"></li>
                                     <li class="nav-header">@CurrentContext.GetCurUser().UserEmail</li>
-                                    <li><a href="#"><i class="icon-home"></i> Đổi mật khẩu</a></li>
-                                    <li><a href="#"><i class="icon-user"></i> Thông tin cá nhân</a></li>
-                                    <li class="nav-header">Đánh giá</li>
-                                    <li>
-                                        <div>
-                                            <div class="btn-group">
-                                                <span class="btn"><i class=" icon-thumbs-up"></i>N</span>
-                                                <span class="btn"><i class="icon-thumbs-down"></i>N</span>
-                                            </div>
-                                        </div>
-                                    </li>
+                                    <li><a href='@Url.Action("Edit", "User", new { id = CurrentContext.GetCurUser().UserID })'><i class="icon-home"></i> Đổi thông tin cá nhân</a></li>
+                                    <li><a href='@Url.Action("Details", "User", new { id = CurrentContext.GetCurUser().UserID })'><i class="icon-user"></i> Thông tin cá nhân</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#"><i class="icon-flag"></i> Hoạt động mua bán</a></li>
+                                    <li><a href='@Url.Action("Summary", "User")'><i class="icon-flag"></i> Hoạt động mua bán</a></li>
                                     <li class="divider"></li>
                                     <li><i class="icon-cog"></i>Số dư tài khoản @CurrentContext.GetCurUser().UserCash đồng</li>
                                     <li><a href="#"> Nạp tiền</a></li>
