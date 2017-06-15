@@ -16,10 +16,12 @@ namespace auctionwebsite.Controllers
     public class AdminController : Controller
     {
         private AuctionContext db = new AuctionContext();
+        [CheckLogin(Permission=1)]
         public ActionResult Dashboard()
         {
             return View();
         }
+        [CheckLogin(Permission = 1)]
         public ActionResult Product(string searchString, int? page = 1)
         {
             int n = db.Cates.Count();
@@ -54,6 +56,7 @@ namespace auctionwebsite.Controllers
             return View(product);
         }
         [HttpPost]
+        [CheckLogin(Permission = 1)]
         public JsonResult AcceptProduct(int id)
         {
             try
@@ -76,6 +79,7 @@ namespace auctionwebsite.Controllers
             }
         }
         [HttpPost]
+        [CheckLogin(Permission = 1)]
         public JsonResult RefuseProduct(int id)
         {
             try
@@ -96,6 +100,38 @@ namespace auctionwebsite.Controllers
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
+        }
+        [CheckLogin(Permission = 1)]
+        public ActionResult UserEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            User user = db.Users.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        // POST: /UserEdit/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [CheckLogin(Permission = 1)]
+        public ActionResult UserEdit([Bind(Include = "UserID,UserName,UserPassword,ConfirmPassword,Password,UserEmail,UserLevel,UserFirstName,UserLastName,UserDOB,UserAddress,UserCity")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                user.Password = Helpers.Helpers.EncodePasswordMd5(user.UserPassword);
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(user);
         }
     }
 }
