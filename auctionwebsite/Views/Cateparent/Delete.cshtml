@@ -1,0 +1,30 @@
+﻿@model auctionwebsite.Models.Cateparent
+
+@{
+    ViewBag.Title = "Xóa";
+    Layout = "~/Views/Shared/admin_layout.cshtml";
+}
+
+<h3>Bạn có muốn xóa danh mục này không?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Tên danh mục
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CateparentName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Xóa" class="btn btn-default" /> |
+            @Html.ActionLink("Trở lại danh sách", "Index")
+        </div>
+    }
+</div>
