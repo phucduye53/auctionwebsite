@@ -48,6 +48,7 @@
             <div class="control-group">
                 <label class="control-label" for="input_email">Email  <sup>*</sup></label>
                 <div class="controls">
+                  
                     @Html.TextBoxFor(model => model.UserEmail, new { @placeholder = "Nhập Email" })
                     @Html.ValidationMessageFor(model => model.UserEmail, null, new { @class = "alert-error" })
                 </div>
