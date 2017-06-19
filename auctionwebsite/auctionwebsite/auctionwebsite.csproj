@@ -135,6 +135,7 @@
     <Compile Include="Controllers\CateparentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\AuctionContext.cs" />
     <Compile Include="DAL\AuctionDataInitializer.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Helpers\CheckLoginAttribute.cs" />
     <Compile Include="Helpers\CurrentContext.cs" />
     <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Helpers\MailHelper.cs" />
     <Compile Include="Models\Bidding.cs" />
     <Compile Include="Models\Cate.cs" />
     <Compile Include="Models\Cateparent.cs" />
@@ -366,6 +368,13 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="MailTemplate\Bidding\Buyer.html" />
+    <Content Include="MailTemplate\Bidding\LastHigestBuyer.html" />
+    <Content Include="MailTemplate\Bidding\Seller.html" />
+    <Content Include="MailTemplate\BidOver2\Buyer.html" />
+    <Content Include="MailTemplate\BidOver2\Seller.html" />
+    <Content Include="MailTemplate\BidOver\Seller.html" />
+    <Content Include="MailTemplate\Kick\KickUser.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\assets\font-awesome\fonts\fontawesome-webfont.eot" />
@@ -551,6 +560,12 @@
     <Content Include="Views\Product\DetailPartial.cshtml" />
     <Content Include="Views\User\BiddingList.cshtml" />
     <Content Include="Views\Admin\UserEdit.cshtml" />
+    <Content Include="Views\Home\PriceHomePartial.cshtml" />
+    <Content Include="Views\Home\BiddingHomePartial.cshtml" />
+    <Content Include="Views\Home\DateHomePartial.cshtml" />
+    <Content Include="Views\Search\SearchBarPartial.cshtml" />
+    <Content Include="Views\Search\SearchProduct.cshtml" />
+    <Content Include="Views\Search\Cate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
