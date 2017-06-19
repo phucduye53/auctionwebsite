@@ -33,7 +33,7 @@
                             {
                                 <td>Admin</td>
                             }
-                            <td>@Html.ActionLink("Sửa", "Edit", new { id = item.UserID })</td>
+                            <td><a href="@Url.Action("UserEdit", "Admin", new { id=item.UserID})">Chỉnh sửa</a></td>
                             <td>@Html.ActionLink("Xóa", "Delete", new { id = item.UserID })</td>
                         </tr>
                     }
