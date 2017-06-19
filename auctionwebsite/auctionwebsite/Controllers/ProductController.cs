@@ -137,7 +137,7 @@ namespace auctionwebsite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CheckLogin(Permission = 0)]
-                public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, List<HttpPostedFileBase> fileSubInput)
+                public ActionResult Edit([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, List<HttpPostedFileBase> fileSubInput)
                 {
                     if (ModelState.IsValid)
                     {
@@ -278,7 +278,7 @@ namespace auctionwebsite.Controllers
         }
         [HttpPost]
         [CheckLogin(Permission = 0)]
-        public PartialViewResult Bidding(int userid, int proid, int price)
+        public ActionResult Bidding(int userid, int proid, int price)
         {
             //try
             //{
@@ -287,6 +287,8 @@ namespace auctionwebsite.Controllers
             //{
             //        return Json(new { Result = "Lower" });
             //}
+            Bidding temp = db.Biddings.Where(p => p.ProductID == proid && p.ProductBid == product.ProductPrice).FirstOrDefault();
+
             product.ProductPrice = product.ProductPrice + product.ProductTickSize;
             Bidding bid = new Bidding()
             {
@@ -298,7 +300,48 @@ namespace auctionwebsite.Controllers
             };
             db.Entry(product).State = EntityState.Modified;
             db.Entry(bid).State = EntityState.Added;
+
             db.SaveChanges();
+            //Email for Buyer
+            //try
+            //{
+            //    string content = System.IO.File.ReadAllText(Server.MapPath("~/MailTemplate/Bidding/Buyer.html"));
+                
+
+            //    content = content.Replace("{{ProductName}}", product.ProductName);
+            //    content = content.Replace("{{ProductID}}", product.ProductID.ToString());
+            //    content = content.Replace("{{UserName}}", product.User.UserName);
+            //    content = content.Replace("{{ProductPrice}}", bid.PriceBid.ToString());
+            //    content = content.Replace("{{ProductRealPrice}}", product.ProductPrice.ToString());
+            //    if (bid.User == null)
+            //    {
+             
+            //    }
+            //    else
+            //    {
+            //        MailHelper.SendMail(bid.User.UserEmail.ToString(), "Đấu giá sản phẩm - Người mua", content);
+            //    }
+
+                //MailHelper.SendMail(toEmail, "Đấu giá sản phẩm - Người mua", content);
+
+                ////Email for Seller
+                //string content2 = System.IO.File.ReadAllText(Server.MapPath("~/MailTemplate/Bidding/Seller.html"));
+
+                //content2 = content2.Replace("{{ProductName}}", product.ProductName);
+                //content2 = content2.Replace("{{ProductID}}", product.ProductID.ToString());
+                //content2 = content2.Replace("{{UserName}}", product.User.UserName);
+                //content2 = content2.Replace("{{ProductPrice}}", bid.PriceBid.ToString());
+                //content2 = content2.Replace("{{UserBuyName}}", bid.User.UserName.ToString());
+
+                //MailHelper.SendMail(product.User.UserEmail.ToString(), "Đấu giá sản phẩm - Người bán", content2);
+            //}
+            //catch(Exception ex)
+            //{
+            //    TempData["message"] = ex;
+            //    return RedirectToAction("Index", "Home");
+            //}
+
+
             return PartialView("DetailPartial", product);
 
             //}
