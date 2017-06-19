@@ -16,5 +16,6 @@ namespace auctionwebsite.Models
         public int CateparentID { get; set; }
         public virtual Cateparent Cateparent { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+
     }
 }
