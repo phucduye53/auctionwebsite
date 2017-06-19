@@ -1,0 +1,112 @@
+﻿@model PagedList.IPagedList<auctionwebsite.Models.Product>
+@using auctionwebsite.Helpers
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Tìm kiếm";
+    Layout = "~/Views/Shared/home_layout.cshtml";
+}
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
+        <li class="active">Tìm kiếm</li>
+    </ul>
+    <h3> Tìm kiếm sản phẩm </h3>
+    @Html.TextBox("CurrentSearchText", ViewBag.CurrentSearchText as string, new { style = "display: none;" })
+    @Html.TextBox("CurrentCateparentID", ViewBag.CurrentCateparentID as string, new { style = "display: none;" })
+    <hr class="soft" />
+    <form class="form-horizontal span6">
+        <div class="control-group">
+            <label class="control-label alignL">Sắp xếp</label>
+            <select id="SortOrder" name="SortOrder" onchange="SelectionChanged()">
+                <option value="0">Tên sản phẩm a-z</option>
+                <option value="1">Thời gian tăng dần</option>
+                <option value="2">Thời gian giảm dần</option>
+                <option value="3">Giá tăng dần</option>
+                <option value="4">Giá giảm dần</option>
+            </select>
+        </div>
+    </form>
+    <div id="myTab" class="pull-right">
+    </div>
+    <br class="clr" />
+    <div class="tab-content">
+        <div class="tab-pane active" id="blockView">
+            <ul class="thumbnails">
+                @foreach( var item in Model)
+                { 
+                <li class="span3">
+                    <div class="thumbnail">
+                        <a href="@Url.Action("Details", "Product", new { id=item.ProductID })"><img src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="@item.ProductName" /></a>
+                        <div class="caption">
+                            <h5>Bởi :<a href="@Url.Action("Details", "User", new { id=item.UserID})">@item.User.UserName</a></h5>
+                            <h5>@item.ProductName</h5>
+                            <h5>@item.ProductPrice VNĐ</h5>
+                            <div style="text-align:center" data-countdown="@item.ProductDateSold" data-id="@item.ProductID">
+                            </div>
+                            <h4 style="text-align:center"><a class="btn btn-primary" href="@Url.Action("Details", "Product", new { id=item.ProductID})">Đấu giá</a></h4>
+                        </div>
+                    </div>
+                </li>
+                }
+            </ul>
+            <hr class="soft" />
+        </div>
+    </div>
+
+    <div class="pagination">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("SearchProduct",
+                                        new { page, SortOrder = ViewBag.CurrentSort, CurrentSearchText = ViewBag.CurrentSearchText, CurrentCateparentID = ViewBag.CurrentCateparentID }))
+    </div>
+    <br class="clr" />
+</div>
+</div>
+</div>
+</div>
+@section Scripts
+{
+    <script type="text/javascript">
+
+        function SelectionChanged()
+        {
+            var CurrentCateparentIDValue = document.getElementById("CurrentCateparentID").value;           
+            var CurrentSearchTextValue = document.getElementById("CurrentSearchText").value;
+            var order = document.getElementById("SortOrder");
+            var OrderValue = order.options[order.selectedIndex].value;
+            var url = '@Html.Raw(Url.Action("SearchProduct", "Search", new { CurrentCateparentID = "para1", CurrentSearchText = "para2", SortOrder ="para3"}))';
+            url = url.replace("para1", CurrentCateparentIDValue);
+            url = url.replace("para2", CurrentSearchTextValue);
+            url = url.replace("para3", OrderValue);
+            window.location = url;
+        }
+        $('[data-countdown]').each(function () {
+            var $this = $(this), finalDate = $(this).data('countdown'), data = $(this).data('id');
+            $this.countdown(finalDate, function (event) {
+            }).on('update.countdown', function (event) {
+                var format = '%H:%M:%S';
+                if (event.offset.totalDays > 0) {
+                    format = '%-d Ngày ' + format;
+                }
+                $(this).html(event.strftime("Còn " + format));
+            })
+            .on('finish.countdown', function (event) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("BidOver","Product")',
+                    data: {
+                        proid: data
+                    },
+                    success: function (data) {
+                        $(this).html('Đấu giá kết thúc');
+                    },
+                    error: function (ex) {
+                        alert("Fail " + ex.Message);
+                    }
+                });
+            });
+        });
+    </script>
+}
