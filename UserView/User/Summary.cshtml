@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Summary";
+    Layout = "~/Views/Shared/user_layout.cshtml";
+}
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href='@Url.Action("Index","Home")'>Trang chủ</a> <span class="divider">/</span></li>
+        <li><a class="active">Tài khoản</a></li>
+    </ul>
+    </ul>
+    <h3>Mua</h3>
+    <hr class="soft" />
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Chức năng</th>
+                <th>Sản phẩm đang theo dõi</th>
+                <th>Sản phẩm đang đấu giá</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Mua</td>
+                <td><a href='@Url.Action("FollowList","User")' role="button"><span class="btn btn-large">Xem danh sách</span></a></td>
+                <td><a href='@Url.Action("BiddingList","User")' role="button"><span class="btn btn-large">Xem danh sách</span></a></td>
+            </tr>
+        </tbody>
+    </table>
+    <h3>Bán</h3>
+    <hr class="soft" />
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Chức năng</th>
+                <th>Đấu giá sản phẩm</th>
+                <th>Sản phẩm đã đăng</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Bán</td>
+                <td><a href='@Url.Action("Create","Product")' role="button"><span class="btn btn-large">Đăng sản phẩm</span></a></td>
+                <td><a href='@Url.Action("Index","Product")' role="button"><span class="btn btn-large">Xem danh sách</span></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div></div>
+</div>
