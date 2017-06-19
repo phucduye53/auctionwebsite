@@ -17,6 +17,7 @@
     <link href="~/Content/themes/css/font-awesome.css" rel="stylesheet" type="text/css">
     <!-- Google-code-prettify -->
     <link href="~/Content/themes/js/google-code-prettify/prettify.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
     <!-- fav and touch icons -->
     <link rel="shortcut icon" href="themes/images/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/Content/themes/images/ico/apple-touch-icon-144-precomposed.png">
@@ -48,18 +49,9 @@
                     </a>
                     <div class="navbar-inner">
                         <a class="brand" href="index.html"><img src="~/Content/themes/images/logo.png" alt="Bootsshop" /></a>
-                        <form class="form-inline navbar-search" method="post" action="products.html">
-                            <input id="srchFld" class="srchTxt" type="text" />
-                            <select class="srchTxt">
-                                <option>All</option>
-                                <option>CLOTHES </option>
-                                <option>FOOD AND BEVERAGES </option>
-                                <option>HEALTH & BEAUTY </option>
-                                <option>SPORTS & LEISURE </option>
-                                <option>BOOKS & ENTERTAINMENTS </option>
-                            </select>
-                            <button type="submit" id="submitButton" class="btn btn-primary">Tìm kiếm</button>
-                        </form>
+                        @{
+                            Html.RenderAction("LoadSearchBar","Search");
+                        }
                         <ul id="topMenu" class="nav pull-right">
                             <li class=""><a href="">Liên hệ</a></li>
                             @if (CurrentContext.IsLogged() == false)
