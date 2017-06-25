@@ -10,26 +10,21 @@
     </div>
 }
 <div class="span9">
-    <div class="well well-small">
-        <h4>Top sản phẩm có giá cao nhất</h4>
+    <div class="well well-small" id="price">
         @{
             Html.RenderAction("LoadHomePriceProduct");
         }
     </div>
-    <div class="well well-small">
-        <h4>Top sản phẩm có nhiều lượt đấu giá nhất</h4>
+    <div class="well well-small" id="bid">
         @{
             Html.RenderAction("LoadHomeBiddingProduct");
         }
     </div>
-    <div class="well well-small">
-        <h4>Top sản phẩm sắp kết thúc</h4>
+    <div class="well well-small" id="date">
         @{
             Html.RenderAction("LoadHomeDateProduct");
         }
     </div>
-
-
 </div>
 		</div>
 	</div>
@@ -38,15 +33,16 @@
 @section Scripts
 {
     <script type="text/javascript">
+        
         $('[data-countdown]').each(function () {
-            var $this = $(this), finalDate = $(this).data('countdown'),data = $(this).data('id');
+            var $this = $(this), finalDate = $(this).data('countdown'), data = $(this).data('id');
             $this.countdown(finalDate, function (event) {
             }).on('update.countdown', function (event) {
                 var format = '%H:%M:%S';
                 if (event.offset.totalDays > 0) {
                     format = '%-d Ngày ' + format;
                 }
-                $(this).html(event.strftime("Còn "+format));
+                $(this).html(event.strftime("Còn " + format));
             })
             .on('finish.countdown', function (event) {
                 $.ajax({
@@ -63,6 +59,130 @@
                     }
                 });
             });
+        });
+
+        function RefreshPricePartial() {
+            $.ajax({
+                url: '@Url.Action("LoadHomePriceProduct", "Home")',
+                type: 'post',
+                cache: false,
+                async: true,
+                success: function (result) {
+                    $('#price').html(result);
+                    $('[data-countdown]').each(function () {
+                        var $this = $(this), finalDate = $(this).data('countdown'), data = $(this).data('id');
+                        $this.countdown(finalDate, function (event) {
+                        }).on('update.countdown', function (event) {
+                            var format = '%H:%M:%S';
+                            if (event.offset.totalDays > 0) {
+                                format = '%-d Ngày ' + format;
+                            }
+                            $(this).html(event.strftime("Còn " + format));
+                        })
+                        .on('finish.countdown', function (event) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("BidOver","Product")',
+                                data: {
+                                    proid: data
+                                },
+                                success: function (data) {
+                                    $(this).html('Đấu giá kết thúc');
+                                },
+                                error: function (ex) {
+                                    alert("Fail " + ex.Message);
+                                }
+                            });
+                        });
+                    });
+                }
+            });
+        }
+        function RefreshBidPartial() {
+            $.ajax({
+                url: '@Url.Action("LoadHomeBiddingProduct", "Home")',
+                type: 'post',
+                cache: false,
+                async: true,
+                success: function (result) {
+                    $('#bid').html(result);
+                    $('[data-countdown]').each(function () {
+                        var $this = $(this), finalDate = $(this).data('countdown'), data = $(this).data('id');
+                        $this.countdown(finalDate, function (event) {
+                        }).on('update.countdown', function (event) {
+                            var format = '%H:%M:%S';
+                            if (event.offset.totalDays > 0) {
+                                format = '%-d Ngày ' + format;
+                            }
+                            $(this).html(event.strftime("Còn " + format));
+                        })
+                        .on('finish.countdown', function (event) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("BidOver","Product")',
+                                data: {
+                                    proid: data
+                                },
+                                success: function (data) {
+                                    $(this).html('Đấu giá kết thúc');
+                                },
+                                error: function (ex) {
+                                    alert("Fail " + ex.Message);
+                                }
+                            });
+                        });
+                    });
+                }
+            });
+        }
+        function RefreshDatePartial() {
+            $.ajax({
+                url: '@Url.Action("LoadHomeDateProduct", "Home")',
+                type: 'post',
+                cache: false,
+                async: true,
+                success: function (result) {
+                    $('#date').html(result);
+                    $('[data-countdown]').each(function () {
+                        var $this = $(this), finalDate = $(this).data('countdown'), data = $(this).data('id');
+                        $this.countdown(finalDate, function (event) {
+                        }).on('update.countdown', function (event) {
+                            var format = '%H:%M:%S';
+                            if (event.offset.totalDays > 0) {
+                                format = '%-d Ngày ' + format;
+                            }
+                            $(this).html(event.strftime("Còn " + format));
+                        })
+                        .on('finish.countdown', function (event) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("BidOver","Product")',
+                                data: {
+                                    proid: data
+                                },
+                                success: function (data) {
+                                    $(this).html('Đấu giá kết thúc');
+                                },
+                                error: function (ex) {
+                                    alert("Fail " + ex.Message);
+                                }
+                            });
+                        });
+                    });
+                }
+            });
+        }
+        $(document).ready(function () {
+            function RefreshPartial() {        
+                setTimeout(function () {
+                    RefreshPricePartial()
+                    RefreshBidPartial();
+                    RefreshDatePartial();
+                    RefreshPartial()
+                }, 5000);
+            }
+            //initialize the loop
+            RefreshPartial();
         });
     </script>
 }
