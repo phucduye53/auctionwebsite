@@ -50,21 +50,22 @@ namespace auctionwebsite.DAL
             string userpassword2 = Helpers.Helpers.EncodePasswordMd5("0919061624");
             var Users = new List<User>
             {
-                new User{UserName="phucduye54",Password=userpassword2,UserLevel=1,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye54@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",OldPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"},
-                new User{UserName="phucduye55",Password=userpassword2,UserLevel=0,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye55@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",OldPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"},
-                new User{UserName="phucduye56",Password=userpassword2,UserLevel=0,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye56@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",OldPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"}
+                new User{UserName="phucduye54",Password=userpassword2,UserLevel=2,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye54@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",OldPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"},
+                new User{UserName="phucduye55",Password=userpassword2,UserLevel=1,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye55@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",OldPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"},
+                new User{UserName="phucduye56",Password=userpassword2,UserLevel=0,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye56@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",OldPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"},
+                new User{UserName="phucduye57",Password=userpassword2,UserLevel=0,UserAddress="HCM",UserFirstName="Le",UserEmail="phucduye57@gmail.com",UserCash=1000,UserCity="HCM",UserPassword="0919061624",ConfirmPassword="0919061624",OldPassword="0919061624",UserDOB="9/12/1996",UserLastName="Truc"}
             };
             Users.ForEach(s => context.Users.Add(s));
             context.SaveChanges();
             var Products = new List<Product>
             {
-                new Product{ProductName="Quạt máy xịn pro",ProductDateSold="2017/06/22 03:00",ProductPrice=200000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=1},
+                new Product{ProductName="Quạt máy xịn pro",ProductDateSold="2017/06/30 03:00",ProductPrice=200000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=1},
                 new Product{ProductName="Máy ảnh xịn",ProductDateSold="2017/06/2 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=3,CateID=20,CateparentID=5,UserID=2},
-                new Product{ProductName="Máy ảnh rất xịn",ProductDateSold="2017/06/21 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
-                new Product{ProductName="Máy ảnh xịn cấp 2",ProductDateSold="2017/06/22 03:00",ProductPrice=400000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
-                new Product{ProductName="Máy ảnh xịn cấp 3",ProductDateSold="2017/06/23 03:00",ProductPrice=300000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
-                new Product{ProductName="Máy ảnh xịn cấp 4",ProductDateSold="2017/06/24 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
-                new Product{ProductName="Máy ảnh xịn cấp 5",ProductDateSold="2017/06/25 03:00",ProductPrice=500000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=2}
+                new Product{ProductName="Máy ảnh rất xịn",ProductDateSold="2017/06/30 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh xịn cấp 2",ProductDateSold="2017/06/26 03:00",ProductPrice=400000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh xịn cấp 3",ProductDateSold="2017/06/27 03:00",ProductPrice=300000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh xịn cấp 4",ProductDateSold="2017/06/28 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh xịn cấp 5",ProductDateSold="2017/06/29 03:00",ProductPrice=500000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=2}
             };
             Products.ForEach(s => context.Products.Add(s));
             context.SaveChanges();
