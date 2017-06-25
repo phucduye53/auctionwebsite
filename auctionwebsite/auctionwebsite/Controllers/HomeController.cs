@@ -42,18 +42,13 @@ namespace auctionwebsite.Controllers.Admin
             var product = db.Products.Include(s => s.FileDetails).Include(s => s.User).Include(s => s.Biddings).Where(p => p.ProductStatus == 1).OrderBy(p =>p.ProductDateSold).Take(4);
             return PartialView("DateHomePartial", product);
         }
-        [HttpPost]
-        public JsonResult BidOver(int proid)
+        protected override void Dispose(bool disposing)
         {
-            Product product = db.Products.Include(s => s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p => p.Biddings).SingleOrDefault(x => x.ProductID == proid);
-            if(product.ProductStatus==3)
+            if (disposing)
             {
-                return Json(new { Result = "OK" });
+                db.Dispose();
             }
-            product.ProductStatus = 3;
-            db.Entry(product).State = EntityState.Modified;
-            db.SaveChanges();
-            return Json(new { Result = "OK" });
+            base.Dispose(disposing);
         }
 
 	}
