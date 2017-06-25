@@ -82,7 +82,7 @@
                 <div class="control-group">
                     <label class="control-label" for="inputLname">Ngày sinh  <sup>*</sup></label>
                     <div class="controls">
-                        @Html.EditorFor(model => model.UserDOB)
+                        @Html.EditorFor(model => model.UserDOB, new { @class = "datepicker" })
                         @Html.ValidationMessageFor(model => model.UserDOB)
                     </div>
                 </div>
@@ -115,4 +115,14 @@
 </div>
     </div>
 </div></div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $('.datepicker').datetimepicker({
+            timepicker: false,
+            formatDate: 'd.m.Y'
+        });
+    </script>
+}
 

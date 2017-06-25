@@ -29,9 +29,13 @@
                             {
                                 <td>User</td>
                             }
-                            else
+                            @if(item.UserLevel==1)
                             {
                                 <td>Admin</td>
+                            }
+                            @if (item.UserLevel == 2)
+                            {
+                                <td>Super Admin</td>
                             }
                             <td><a href="@Url.Action("UserEdit", "Admin", new { id=item.UserID})">Chỉnh sửa</a></td>
                             <td>@Html.ActionLink("Xóa", "Delete", new { id = item.UserID })</td>
