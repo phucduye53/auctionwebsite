@@ -40,7 +40,7 @@
 
     </span>
 </h3>
-<h4>@Model.User.UserName</h4>
+<h4><a href="@Url.Action("Details", "User", new { id=Model.UserID })">@Model.User.UserName</a></h4>
 <div class="btn-toolbar">
     <div class="btn-group">
         @if(CurrentContext.IsLogged() == true)
@@ -133,7 +133,6 @@
                     <th>Ra giá</th>
                     <th>Thời gian</th>
                     <th>Hành động</th>
-                    <th>Thông tin</th>
                 </tr>
                    }
                    if(CurrentContext.GetCurUser().UserID!=@Model.UserID)
@@ -171,13 +170,12 @@
                          { 
                     <tr>
                      <th>@stt</th>
-                     <th>@item.User.UserName</th>
+                     <th><a href="@Url.Action("Details", "User", new { id=item.UserID })">@item.User.UserName</a></th>
                      <th>@item.ProductBid VNĐ</th>
                      <th>@item.DateBid</th>
                       <th>
                           <button id="deleteUser" data-id="@item.UserID"><i class="icon-remove icon-white"></i></button>
                       </th>
-                     <th>Thông tin người đấu giá</th>
                    </tr>
                          }
                          if(CurrentContext.GetCurUser().UserID!=@Model.UserID && item.BidStatus!= 1)

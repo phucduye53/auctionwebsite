@@ -184,7 +184,17 @@
         });
         return false;
         });
-        $('.datepicker').datetimepicker();
+        var currentdate = new Date();
+        var datetimestart = currentdate.getFullYear() + "/" + (currentdate.getMonth() + 1) + "/" + currentdate.getDate();
+        var nextWeek = new Date(currentdate.getTime() + 7 * 24 * 60 * 60 * 1000);
+        var datetimeend = nextWeek.getFullYear() + "/" + (nextWeek.getMonth() + 1) + "/" + nextWeek.getDate();
+
+        //limit datetime
+        $('.datepicker').datetimepicker({
+            minDate: datetimestart,
+            maxDate: datetimeend
+        });
+
         if (window.File && window.FileList && window.FileReader) {
             $("#fileSubInput").on("change", function (e) {
                     var files = e.target.files,

@@ -32,7 +32,73 @@
     $(document).ready(function () {
         // handle bidding
         $('#grid').on("click", "#bidButton", function (e) {
-            if ($("#bidPrice").val() > $("#ProductPrice").val() || $("#UserID").val() != '@Model.UserID') {
+            swal({
+                title: "Đấu giá sản phẩm",
+                text: "Xác nhận đấu giá!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Đồng ý!",
+                showLoaderOnConfirm: true,
+                closeOnConfirm: false
+            },
+            function () {
+                if ($("#bidPrice").val() > $("#ProductPrice").val() || $("#UserID").val() != '@Model.UserID')
+                {
+                    $.ajax({
+                        url: '@Url.Action("Bidding")',
+                        type: "post",
+                        data: {
+                            userid: $("#UserID").val(),
+                            proid: $("#ProductID").val(),
+                            price: $("#bidPrice").val()
+                        }
+                    })
+              .done(function (result) {
+                  $("#grid").html(result);
+                  swal('Thành công', 'ABC ', "success");
+                  $('#clock').countdown('@Model.ProductDateSold')
+                  .on('update.countdown', function (event) {
+                      var format = '%H:%M:%S';
+                      if (event.offset.totalDays > 0) {
+                          format = '%-d Ngày %!d ' + format;
+                      }
+                      if (event.offset.weeks > 0) {
+                          format = '%-w Tuần %!w ' + format;
+                      }
+                      $(this).html(event.strftime(format));
+                  })
+                  .on('finish.countdown', function (event) {
+                      $('#bidButton').prop('disabled', true);
+                      $.ajax({
+                          type: 'POST',
+                          url: '@Url.Action("BidOver")',
+                          data: {
+                              proid: '@Model.ProductID'
+                          },
+                          success: function (data) {
+                              $("#grid").html(data);
+                          },
+                          error: function (ex) {
+                              alert("Fail " + ex.Message);
+                          }
+                       });
+                     });
+                  });
+                }
+                else {
+                    swal('Lỗi phát sinh','Số tiền đấu giá không được nhỏ hơn số tiền hiện tại của sản phẩm ',"Error");
+                }
+            });
+     
+
+
+
+
+
+
+
+            @*if ($("#bidPrice").val() > $("#ProductPrice").val() || $("#UserID").val() != '@Model.UserID') {
                 $.ajax({
                     url: '@Url.Action("Bidding")',
                     type: "post",
@@ -74,22 +140,35 @@
                 });
             } else {
                 alert('Số tiền đấu giá không được nhỏ hơn số tiền hiện tại của sản phẩm ');
-            }
+            }*@
 
         });
         // handle kick user
         $('#grid').on("click", "#deleteUser", function (e) {
-            $.ajax({
-                url: '@Url.Action("KickUser")',
-                type: "post",
-                data: {
-                    userid: $("#deleteUser").data("id"),
-                    proid: $("#ProductID").val(),
-                }
-            })
-            .done(function (result) {
-                $("#grid").html(result);
-            });
+            swal({
+                title: "Xác nhận !",
+                text: "Người dùng ngày sẽ không được phép đấu giá nữa!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Kick người dùng!",
+                closeOnConfirm: false
+            },
+function () {
+    $.ajax({
+        url: '@Url.Action("KickUser")',
+        type: "post",
+        data: {
+            userid: $("#deleteUser").data("id"),
+            proid: $("#ProductID").val(),
+              }
+         })
+             .done(function (result) {
+                 $("#grid").html(result);
+                 location.reload();
+             });
+        });
+           
         });
 
         $('#LikeButton').click(function () {
@@ -106,9 +185,9 @@
                         },
                         success: function (data) {
                             if (data.Result == "OK") {
-                                alert("Thêm thành công");
+                                swal("Thành công!", "Thêm thành công", "success");
                             } else {
-                                alert("Sản phẩm đã có trong danh sách theo dõi")
+                                swal("Lỗi phát sinh!", "Đã tồn tại trong danh sách theo dõi", "warning");
                             }
                         },
                         error: function (ex) {
@@ -117,21 +196,21 @@
                     });
                 }
             } else {
-                alert("Sản phẩm đã có trong danh sách theo dõi");
+                swal("Lỗi phát sinh!", "Đã tồn tại trong danh sách theo dõi", "warning");
             }
 
         });
         $('#UnLikeButton').click(function () {
-            alert('Bạn phải đăng nhập để thực hiện chức năng này');
+            swal("Lỗi phát sinh!", "Bạn phải đăng nhập để thực hiện chức năng", "warning");
         });
         $('#unbidButton').click(function () {
-            alert('Bạn phải đăng nhập để thực hiện chức năng này');
+            swal("Lỗi phát sinh!", "Bạn phải đăng nhập để thực hiện chức năng", "warning");
         });
         $('#unlograteLike').click(function () {
-            alert('Bạn phải đăng nhập để thực hiện chức năng này');
+            swal("Lỗi phát sinh!", "Bạn phải đăng nhập để thực hiện chức năng", "warning");
         });
         $('#unlograteDisLike').click(function () {
-            alert('Bạn phải đăng nhập để thực hiện chức năng này');
+            swal("Lỗi phát sinh!", "Bạn phải đăng nhập để thực hiện chức năng", "warning");
         });
 
 
@@ -151,6 +230,7 @@
                         alert("Bạn đã đánh giá tích cực người dùng này trước đây");
                     } else {
                         $("#grid").html(result);
+                        location.reload();
                     }
                 });
         });
@@ -171,6 +251,7 @@
                         alert("Bạn đã đánh giá không tích cực người dùng này trước đây");
                     } else {
                         $("#grid").html(result);
+                        location.reload();
                     }
                 });
         });
