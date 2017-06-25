@@ -101,7 +101,7 @@ namespace auctionwebsite.Controllers
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
         }
-        [CheckLogin(Permission = 1)]
+        [CheckLogin(Permission = 2)]
         public ActionResult UserEdit(int? id)
         {
             if (id == null)
@@ -121,7 +121,7 @@ namespace auctionwebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [CheckLogin(Permission = 1)]
+        [CheckLogin(Permission = 2)]
         public ActionResult UserEdit([Bind(Include = "UserID,UserName,UserPassword,ConfirmPassword,Password,UserEmail,UserLevel,UserFirstName,UserLastName,UserDOB,UserAddress,UserCity")] User user)
         {
             if (ModelState.IsValid)
