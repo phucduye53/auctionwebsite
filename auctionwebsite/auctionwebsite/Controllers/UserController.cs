@@ -17,7 +17,7 @@ namespace auctionwebsite.Controllers
         private AuctionContext db = new AuctionContext();
 
         // GET: /User/
-        [CheckLogin(Permission = 0)]
+        [CheckLogin(Permission = 2)]
         public ActionResult Index()
         {
             return View(db.Users.ToList());
@@ -107,7 +107,7 @@ namespace auctionwebsite.Controllers
         }
 
         // GET: /User/Delete/5
-        [CheckLogin]
+        [CheckLogin(Permission = 2)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -125,7 +125,7 @@ namespace auctionwebsite.Controllers
         // POST: /User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [CheckLogin]
+        [CheckLogin(Permission = 2)]
         public ActionResult DeleteConfirmed(int id)
         {
             User user = db.Users.Find(id);
@@ -147,10 +147,10 @@ namespace auctionwebsite.Controllers
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
             return Json(!db.Users.Any(x => x.UserName == UserName), JsonRequestBehavior.AllowGet);
         }
-        public JsonResult IsEmailExits(string Email)
+        public JsonResult IsEmailExits(string UserEmail)
         {
             //check if any of the Email matches the Email specified in the Parameter using the ANY extension method.  
-            return Json(!db.Users.Any(x => x.UserEmail == Email), JsonRequestBehavior.AllowGet);
+            return Json(!db.Users.Any(x => x.UserEmail == UserEmail), JsonRequestBehavior.AllowGet);
         }
         public ActionResult Login()
         {
