@@ -21,7 +21,6 @@ namespace auctionwebsite.Models
         public int ProductSoldPrice { get; set; }
         public int ProductSoldInstantPrice { get; set; }
         public string ProductDes{ get; set; }
-        public string ProductHtmlDes { get; set; }
         public int ProductStatus { get; set; }
         public string ProductDateSold { get; set; }
         public string ProductPicName { get; set; }
