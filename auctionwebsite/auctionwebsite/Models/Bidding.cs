@@ -13,7 +13,7 @@ namespace auctionwebsite.Models
         public string DateBid { get; set; }
         public int PriceBid { get; set; }
         public int ProductBid { get; set; }
-        public int BidStatus { get; set; }
+        public int BidStatus { get; set; } // 0 là bình thường , 1 là bị đuổi
         public virtual User User { get; set; }
         public virtual Product Product { get; set; }
     }
