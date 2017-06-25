@@ -25,6 +25,9 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/Content/themes/images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="~/Content/themes/images/ico/apple-touch-icon-57-precomposed.png">
     <link href="~/Content/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <!-- Alert -->
+    <script src="~/Scripts/sweetalert-dev.js"></script>
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
     <style type="text/css" id="enject"></style>
 </head>
 <body>
@@ -48,43 +51,26 @@
                         <span class="icon-bar"></span>
                     </a>
                     <div class="navbar-inner">
-                        <a class="brand" href="index.html"><img src="~/Content/themes/images/logo.png" alt="Bootsshop" /></a>
+                        <a class="brand" href="@Url.Action("Index","Home")"><img src="~/Content/themes/images/logo.png" alt="Bootsshop" /></a>
                         @{
                             Html.RenderAction("LoadSearchBar","Search");
                         }
                         <ul id="topMenu" class="nav pull-right">
-                            <li class=""><a href="">Liên hệ</a></li>
                             @if (CurrentContext.IsLogged() == false)
                             {
                                 <li class=""><a href="@Url.Action("Create","User")">Đăng ký</a></li>
-    <li class="">
-        <a href='@Url.Action("Login","User")' role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
-        @*<div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3>Đăng nhập</h3>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal loginFrm">
-                    <div class="control-group">
-                        <input type="text" id="inputEmail" placeholder="Tài khoản">
-                    </div>
-                    <div class="control-group">
-                        <input type="password" id="inputPassword" placeholder="Mật khẩu">
-                    </div>
-                    <div class="control-group">
-                        <label class="checkbox">
-                            <input type="checkbox"> Lưu
-                        </label>
-                    </div>
-                </form>
-                <button type="submit" class="btn btn-success">Đăng nhập</button>
-             </div>
-          </div>*@
-     </li>
+                                <li class="">
+                                 <a href='@Url.Action("Login","User")' role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
+                                 </li>
                             }
                             else
                             {
+                                if(CurrentContext.GetCurUser().UserLevel==2)
+                                { 
+                                  <li>
+                                       <a href="@Url.Action("Admin","Summary")">Quản lý</a>
+                                 </li>
+                               }
                                 <li class="">
                                     <a href="@Url.Action("Summary","User")" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Tài khoản</span></a>
                                 </li>

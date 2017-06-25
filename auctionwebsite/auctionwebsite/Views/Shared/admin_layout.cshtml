@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using auctionwebsite.Helpers
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -11,7 +12,9 @@
     <link href="~/Content/assets/css/style.css" rel="stylesheet" />
     <link href="~/Content/assets/css/main-style.css" rel="stylesheet" />
     <link rel="stylesheet" media="all" type="text/css" href="/Content/jquery-ui-timepicker-addon.css" />
-
+    <!-- Alert -->
+    <script src="~/Scripts/sweetalert-dev.js"></script>
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
     <!-- Page-Level CSS -->
     <link href="assets/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
 </head>
@@ -176,6 +179,8 @@
                         </ul>
                         <!-- second-level-items -->
                     </li>
+                    @if(CurrentContext.GetCurUser().UserLevel==2)
+                    { 
                     <li>
                         <a href="#"><i class="fa fa-user fa-fw"></i> Người dùng<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -185,6 +190,7 @@
                         </ul>
                         <!-- second-level-items -->
                     </li>
+                    }
                     <li>
                         <a href="@Url.Action("Product","Admin")"><i class="fa fa-flask fa-fw"></i>Duyệt sản phẩm</a>
                     </li>
