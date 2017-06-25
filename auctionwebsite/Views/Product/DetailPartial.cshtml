@@ -1,5 +1,7 @@
-﻿@model auctionwebsite.Models.Product
+﻿
+@model auctionwebsite.Models.Product
 @using auctionwebsite.Helpers
+
 
 <div id="gallery" class="span3">
     <a href="~/Img/@(Model.ProductID+"_"+Model.ProductPicName)" title="@Model.ProductName">
@@ -20,15 +22,13 @@
                 }
             </div>
         </div>
-        <!--
-        <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
-        <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
-        -->
+
     </div>
 </div>
 <div class="span6">
     <h3>
-        @Model.ProductName  <span class="btn">
+        @Model.ProductName 
+         <span class="btn">
         @if (CurrentContext.IsLogged() == false)
         {
             <i id="UnLikeButton" class="icon-star"></i>
@@ -43,9 +43,41 @@
 <h4>@Model.User.UserName</h4>
 <div class="btn-toolbar">
     <div class="btn-group">
-        <span class="btn"><i class=" icon-thumbs-up"></i>N</span>
-        <span class="btn"><i class="icon-thumbs-down"></i>N</span>
-    </div>
+        @if(CurrentContext.IsLogged() == true)
+        { 
+        <a href="#like" class="btn" data-toggle="modal" ><i class="icon-thumbs-up"></i>@Model.User.RateTargetUser.Where(p => p.RateStatus == 0).Count()</a>
+        <div id="like" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>Nhận xét người dùng (Đánh giá tích cực)</h3>
+            </div>
+            <div class="modal-body">
+                    <div class="control-group">
+                        <input type="text" id="inputTxt" placeholder="Ghi nhận xét vào đây">
+                    </div>
+                <button id="rateLike" type="submit" class="btn btn-success">Gửi</button>
+            </div>
+        </div>
+        <a href="#dislike" class="btn" data-toggle="modal"><i class="icon-thumbs-down"></i>@Model.User.RateTargetUser.Where(p => p.RateStatus == 1).Count()</a>
+        <div id="dislike" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>Nhận xét người dùng ( Đánh giá không tích cực )</h3>
+            </div>
+            <div class="modal-body">
+                <div class="control-group">
+                    <input type="text" id="inputDisLikeTxt" placeholder="Ghi nhận xét vào đây">
+                </div>
+                <button id="rateDisLike" type="submit" class="btn btn-success">Gửi</button>
+            </div>
+        </div>
+        }
+        else
+        {
+            <button id="unlograteLike" class="btn" data-toggle="modal"><i class="icon-thumbs-up"></i>@Model.User.RateTargetUser.Where(p => p.RateStatus == 0).Count()</button>
+            <button id="unlograteDisLike" class="btn" data-toggle="modal"><i class="icon-thumbs-down"></i>@Model.User.RateTargetUser.Where(p => p.RateStatus == 1).Count()</button>
+        }
+        </div>
 </div>
 <hr class="soft" />
 <div class="control-group">
@@ -62,25 +94,68 @@
         }
         @if (CurrentContext.IsLogged() == false)
         {
+            if(@Model.ProductStatus == 3)
+            {
+            <button disabled id="unbidButton" class="btn btn-large btn-primary pull-right"> Đấu giá</button>
+            }
+            else { 
             <button id="unbidButton" class="btn btn-large btn-primary pull-right"> Đấu giá</button>
+            }
         }
         else
         {
-            <button id="bidButton" class="btn btn-large btn-primary pull-right"> Đấu giá</button>
+            if (CurrentContext.IsLogged() == true)
+            {
+                if(CurrentContext.GetCurUser().UserID==@Model.UserID || Model.ProductStatus==3)
+                {
+                      <button disabled id="bidButton" class="btn btn-large btn-primary pull-right"> Đấu giá</button>
+                }
+                else
+                {
+                     <button id="bidButton" class="btn btn-large btn-primary pull-right"> Đấu giá</button>
+                }
+            }
         }
     </div>
 </div>
 <hr class="soft" />
-<h4>Có <a href="#list" role="button" data-toggle="modal" style="padding-right:0">@Model.Biddings.Select(i => i.UserID).Distinct().Count()</a> người tham gia phiên đấu giá</h4>
+<h4>Có <a href="#list" role="button" data-toggle="modal" style="padding-right:0">@Model.Biddings.Where(p=>p.BidStatus==0).Select(i => i.UserID).Distinct().Count()</a> người tham gia phiên đấu giá</h4>
     <div id="list" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
         <table class="table table-bordered">
             <thead>
+                @if (CurrentContext.IsLogged() == true)
+                { 
+                    if(CurrentContext.GetCurUser().UserID==@Model.UserID)
+                    { 
                 <tr>
                     <th>STT</th>
                     <th>Username</th>
                     <th>Ra giá</th>
                     <th>Thời gian</th>
+                    <th>Hành động</th>
+                    <th>Thông tin</th>
                 </tr>
+                   }
+                   if(CurrentContext.GetCurUser().UserID!=@Model.UserID)
+                   {
+                  <tr>
+                    <th>STT</th>
+                    <th>Username</th>
+                    <th>Ra giá</th>
+                    <th>Thời gian</th>
+                </tr>
+                   }
+                }
+                @if (CurrentContext.IsLogged() == false)
+                {
+                  <tr>
+                    <th>STT</th>
+                    <th>Username</th>
+                    <th>Ra giá</th>
+                    <th>Thời gian</th>
+                </tr>
+                }
+
             </thead>
         
                 @{
@@ -88,25 +163,68 @@
                 }
                 @foreach (var item in @Model.Biddings)
                 {
-                  <tr>
+                    var temp = item.User.UserName;
+                    temp = (temp.Substring(0, temp.Length - 3) + "***");
+                    if(CurrentContext.IsLogged()==true)
+                    { 
+                         if(CurrentContext.GetCurUser().UserID==@Model.UserID && item.BidStatus!= 1)
+                         { 
+                    <tr>
                      <th>@stt</th>
                      <th>@item.User.UserName</th>
                      <th>@item.ProductBid VNĐ</th>
                      <th>@item.DateBid</th>
-                  </tr>
+                      <th>
+                          <button id="deleteUser" data-id="@item.UserID"><i class="icon-remove icon-white"></i></button>
+                      </th>
+                     <th>Thông tin người đấu giá</th>
+                   </tr>
+                         }
+                         if(CurrentContext.GetCurUser().UserID!=@Model.UserID && item.BidStatus!= 1)
+                         {
+                      <tr>
+                         <th>@stt</th>
+                         <th>@temp</th>
+                         <th>@item.ProductBid VNĐ</th>
+                         <th>@item.DateBid</th>
+                       </tr>
+                         }
+                    }
+
+                    if (CurrentContext.IsLogged() == false && item.BidStatus != 1)
+                    {
+                        <tr>
+                         <th>@stt</th>
+                        <th>@temp</th>
+                         <th>@item.ProductBid VNĐ</th>
+                         <th>@item.DateBid</th>
+                       </tr>
+                    }
                     stt++;
                 }    
             <tbody>
             </tbody>
         </table>
 </div>
-<form class="form-horizontal qtyFrm">
-    <div class="control-group">
-        <div class="countdown">
-            Còn <span id="clock"></span>
+    <form class="form-horizontal qtyFrm">
+        @if(Model.ProductStatus == 1)
+        {
+         <div class="control-group">
+            <div class="countdown">
+                Còn <span id="clock"></span>
+            </div>
         </div>
-    </div>
-</form>
+        }
+        else
+        {
+         <div class="control-group">
+            <div class="countdown">
+               Đấu giá đã kết thúc
+            </div>
+        </div>
+        }
+
+    </form>
 <hr class="soft clr" />
 <p>
     @Model.ProductDes

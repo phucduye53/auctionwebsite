@@ -7,8 +7,8 @@
 <!DOCTYPE html>
 <div class="span9">
     <ul class="breadcrumb">
-        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
-        <li><a href="products.html">Tài khoản</a> <span class="divider">/</span></li>
+        <li><a href='@Url.Action("Index","Home")'>Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href='@Url.Action("Summary","User")'>Tài khoản</a> <span class="divider">/</span></li>
         <li class="active">Sản phẩm đang theo dõi</li>
     </ul>
     </ul>
@@ -20,7 +20,6 @@
                 <th>STT</th>
                 <th>Sản phẩm</th>
                 <th>Chi tiết</th>
-                <th>Người mua giá cao nhất</th>
                 <th>Giá hiện tại</th>
                 <th>Được đăng bởi</th>
                 <th>Trạng thái</th>
@@ -37,9 +36,8 @@
                     <td>@stt</td>
                     <td><a href=""> <img width="60" src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="" /></a></td>
                     <td>@item.ProductDes<br /></td>
-                    <td>0</td> @*user highest price buy*@
-                    <td>$120.00</td> @*highest price*@
-                    <td>@item.User.UserName</td>
+                    <td>@item.ProductPrice</td> @*highest price*@
+                    <td><a href='@Url.Action("Details", "User", new { id=item.User.UserID })'>@item.User.UserName</a></td>
                     @if (@item.ProductStatus == 0)
                     {
                         <td>Đang chờ xác nhận</td>

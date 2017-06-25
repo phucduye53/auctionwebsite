@@ -1,0 +1,29 @@
+﻿@model IEnumerable<auctionwebsite.Models.Product>
+@using auctionwebsite.Helpers
+
+<div class="row-fluid">
+    <div id="featured" class="carousel slide">
+        <div class="carousel-inner">
+            <div class="item active">
+                <ul class="thumbnails">
+                    @foreach (var item in Model)
+                    {
+                        <li class="span3">
+                            <div class="thumbnail">
+                                <a href="@Url.Action("Details", "Product", new { id=item.ProductID})"><img src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="@item.ProductName" /></a>
+                                <div class="caption">
+                                    <h5>Bởi :<a href="@Url.Action("Details", "User", new { id=item.UserID})">@item.User.UserName</a></h5>
+                                    <h5>@item.ProductName</h5>
+                                    <h5>Giá :@item.ProductPrice VNĐ</h5>
+                                    <div style="text-align:center" data-countdown="@item.ProductDateSold" data-id="@item.ProductID">
+                                    </div>
+                                    <h4 style="text-align:center"><a class="btn btn-primary" href="@Url.Action("Details", "Product", new { id=item.ProductID})">Đấu giá</a></h4>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,10 +11,12 @@
         <li><a href="products.html">Sản phẩm</a> <span class="divider">/</span></li>
         <li class="active">Chi tiết sản phẩm</li>
     </ul>
+
     <div class="row" id="grid">
         @{
             Html.RenderAction("LoadProduct");
         }
+
     </div>
 </div>
           </div>
@@ -27,26 +29,69 @@
 @section Scripts
 {
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#grid').on("click", "#bidButton", function (e) {
-                if ($("#bidPrice").val() > $("#ProductPrice").val()) {
-                    $.ajax({
-                        url: '@Url.Action("Bidding")',
-                        type: "post",
-                        data: {
-                            userid: $("#UserID").val(),
-                            proid: $("#ProductID").val(),
-                            price: $("#bidPrice").val()
+    $(document).ready(function () {
+        // handle bidding
+        $('#grid').on("click", "#bidButton", function (e) {
+            if ($("#bidPrice").val() > $("#ProductPrice").val() || $("#UserID").val() != '@Model.UserID') {
+                $.ajax({
+                    url: '@Url.Action("Bidding")',
+                    type: "post",
+                    data: {
+                        userid: $("#UserID").val(),
+                        proid: $("#ProductID").val(),
+                        price: $("#bidPrice").val()
+                    }
+                })
+                .done(function (result) {
+                    $("#grid").html(result);
+                    $('#clock').countdown('@Model.ProductDateSold')
+                    .on('update.countdown', function (event) {
+                        var format = '%H:%M:%S';
+                        if (event.offset.totalDays > 0) {
+                            format = '%-d Ngày %!d ' + format;
                         }
+                        if (event.offset.weeks > 0) {
+                            format = '%-w Tuần %!w ' + format;
+                        }
+                        $(this).html(event.strftime(format));
                     })
-                    .done(function (result) {
-                        $("#grid").html(result);
+                    .on('finish.countdown', function (event) {
+                        $('#bidButton').prop('disabled', true);
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("BidOver")',
+                            data: {
+                                proid: '@Model.ProductID'
+                            },
+                            success: function (data) {
+                                $("#grid").html(data);
+                            },
+                            error: function (ex) {
+                                alert("Fail " + ex.Message);
+                            }
+                        });
                     });
-                } else {
-                    alert('Số tiền đấu giá không được nhỏ hơn số tiền hiện tại của sản phẩm');
-                }
+                });
+            } else {
+                alert('Số tiền đấu giá không được nhỏ hơn số tiền hiện tại của sản phẩm ');
+            }
 
+        });
+        // handle kick user
+        $('#grid').on("click", "#deleteUser", function (e) {
+            $.ajax({
+                url: '@Url.Action("KickUser")',
+                type: "post",
+                data: {
+                    userid: $("#deleteUser").data("id"),
+                    proid: $("#ProductID").val(),
+                }
+            })
+            .done(function (result) {
+                $("#grid").html(result);
             });
+        });
+
         $('#LikeButton').click(function () {
             var temp = '@ViewBag.Count';
             if (temp == 0) {
@@ -74,7 +119,7 @@
             } else {
                 alert("Sản phẩm đã có trong danh sách theo dõi");
             }
-          
+
         });
         $('#UnLikeButton').click(function () {
             alert('Bạn phải đăng nhập để thực hiện chức năng này');
@@ -82,6 +127,56 @@
         $('#unbidButton').click(function () {
             alert('Bạn phải đăng nhập để thực hiện chức năng này');
         });
+        $('#unlograteLike').click(function () {
+            alert('Bạn phải đăng nhập để thực hiện chức năng này');
+        });
+        $('#unlograteDisLike').click(function () {
+            alert('Bạn phải đăng nhập để thực hiện chức năng này');
+        });
+
+
+        $('#grid').on("click", "#rateLike", function (e) {
+            $.ajax({
+                url: '@Url.Action("RateLikeUser","User")',
+                type: "post",
+                data: {
+                    userid: $("#UserID").val(),
+                    targetid: '@Model.UserID',
+                    text: $("#inputTxt").val(),
+                    proid: $("#ProductID").val()
+                }
+            })
+                .done(function (data) {
+                    if (data.Result == "Exist") {
+                        alert("Bạn đã đánh giá tích cực người dùng này trước đây");
+                    } else {
+                        $("#grid").html(result);
+                    }
+                });
+        });
+
+        $('#grid').on("click", "#RateDisLikeUser", function (e) {
+            $.ajax({
+                url: '@Url.Action("RateDisLikeUser", "User")',
+                type: "post",
+                data: {
+                    userid: $("#UserID").val(),
+                    targetid: '@Model.UserID',
+                    text: $("#inputDisLikeTxt").val(),
+                    proid: $("#ProductID").val()
+                }
+            })
+                .done(function (data) {
+                    if (data.Result == "Exist") {
+                        alert("Bạn đã đánh giá không tích cực người dùng này trước đây");
+                    } else {
+                        $("#grid").html(result);
+                    }
+                });
+        });
+
+
+
         $('#clock').countdown('@Model.ProductDateSold')
          .on('update.countdown', function (event) {
              var format = '%H:%M:%S';
@@ -95,9 +190,22 @@
          })
     .on('finish.countdown', function (event) {
         $('#bidButton').prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("BidOver")',
+            data: {
+                proid: '@Model.ProductID'
+            },
+            success: function (data) {
+                $("#grid").html(data);
+            },
+            error: function (ex) {
+                alert("Fail " + ex.Message);
+            }
+        });
     });
 
 
     });
-</script>
+    </script>
 }

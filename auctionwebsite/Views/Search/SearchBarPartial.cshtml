@@ -1,0 +1,8 @@
+﻿@model IEnumerable<auctionwebsite.Models.Cateparent>
+
+@using (Html.BeginForm("SearchProduct", "Search", FormMethod.Get, new { @class = "form-inline navbar-search" }))
+{ 
+    @Html.TextBox("SearchText", null, new {@placeholder = "Tìm kiếm" })
+    @Html.DropDownList("CateparentID","Tất cả")
+    <button type="submit" id="submitButton" class="btn btn-primary">Tìm kiếm</button>
+}

@@ -8,8 +8,8 @@
 <!DOCTYPE html>
 <div class="span9">
     <ul class="breadcrumb">
-        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
-        <li><a href="products.html">Tài khoản</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","Home")">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Summary","User")">Tài khoản</a> <span class="divider">/</span></li>
         <li class="active">Sản phẩm của tôi đã đăng</li>
     </ul>
     </ul>
@@ -22,7 +22,6 @@
                 <th>Chi tiết</th>
                 <th>Người mua giá cao nhất</th>
                 <th>Giá hiện tại</th>
-                <th>Giá khởi điểm</th>
                 <th>Trạng thái</th>
                 <th>Hủy đấu giá</th>
                 <th>Chỉnh sửa</th>
@@ -32,10 +31,9 @@
             @foreach (var item in Model)
             {
               <tr>
-                <td><a href=""> <img width="60" src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="" /></a></td>
+                <td><a href="@Url.Action("Details", "Product", new { id = item.ProductID})"> <img width="60" src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="" /></a></td>
                 <td>@item.ProductDes<br /></td>
-                <td>0</td> @*user highest price buy*@
-                <td>$120.00</td> @*highest price*@
+                <td>@item.Biddings.Where(p=>p.BidStatus != 0 && p.ProductBid == item.ProductPrice).Select(p=>p.User.UserName)</td> @*user highest price buy*@
                 <td>@item.ProductPrice</td>
                   @if(@item.ProductStatus == 0 )
                   {
@@ -54,7 +52,7 @@
                       <td>Đấu giá đã hủy</td>
                   }        
                 <td><button><i class="icon-remove icon-white"></i></button>	</td>
-                <td><a href="#">Sửa</a></td>
+                <td><a href="@Url.Action("Edit", "Product", new { id=item.ProductID})">Sửa</a></td>
             </tr>
             }
         </tbody>

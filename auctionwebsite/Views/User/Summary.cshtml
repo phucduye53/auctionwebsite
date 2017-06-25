@@ -6,7 +6,7 @@
 
 <div class="span9">
     <ul class="breadcrumb">
-        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href='@Url.Action("Index","Home")'>Trang chủ</a> <span class="divider">/</span></li>
         <li><a class="active">Tài khoản</a></li>
     </ul>
     </ul>
@@ -24,8 +24,8 @@
         <tbody>
             <tr>
                 <td>Mua</td>
-                <td><button><a href="#">Xem danh sách</a></button></td>
-                <td><button><a href="#">Xem danh sách</a></button></td>
+                <td><a href='@Url.Action("FollowList","User")' role="button"><span class="btn btn-large">Xem danh sách</span></a></td>
+                <td><a href='@Url.Action("BiddingList","User")' role="button"><span class="btn btn-large">Xem danh sách</span></a></td>
             </tr>
         </tbody>
     </table>
@@ -36,15 +36,16 @@
         <thead>
             <tr>
                 <th>Chức năng</th>
-                <th>Sản phẩm đang được đấu giá</th>
-                <th>Sản phẩm đã bán</th>
+                <th>Đấu giá sản phẩm</th>
+                <th>Sản phẩm đã đăng</th>
+
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>Bán</td>
-                <td><button><a href="#">Xem danh sách</a></button></td>
-                <td><button><a href="#">Xem danh sách</a></button></td>
+                <td><a href='@Url.Action("Create","Product")' role="button"><span class="btn btn-large">Đăng sản phẩm</span></a></td>
+                <td><a href='@Url.Action("Index","Product")' role="button"><span class="btn btn-large">Xem danh sách</span></a></td>
             </tr>
         </tbody>
     </table>

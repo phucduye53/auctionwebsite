@@ -25,6 +25,8 @@ namespace auctionwebsite.Models
         [Compare("UserPassword", ErrorMessage = "Mật khẩu nhập lại không đúng")]
         [Required(ErrorMessage = "Chưa nhập lại mật khẩu")]
         public string ConfirmPassword { get; set; }
+        [NotMapped]
+        public string OldPassword { get; set; }
         public string Password { get; set; }
         [Required]
         public int UserLevel { get; set; }
@@ -50,5 +52,7 @@ namespace auctionwebsite.Models
         public virtual ICollection<Favorite> Favorites { get; set; }
 
         public virtual ICollection<Bidding> Biddings { get; set; }
+        public virtual ICollection<Rate> RateUser { get; set; }
+        public virtual ICollection<Rate> RateTargetUser { get; set; }
     }
 }

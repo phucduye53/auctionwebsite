@@ -1,0 +1,94 @@
+﻿@model IEnumerable<auctionwebsite.Models.Bidding>
+@{
+    ViewBag.Title = "Sản phẩm đang đấu giá";
+    Layout = "~/Views/Shared/user_layout.cshtml";
+}
+
+<!DOCTYPE html>
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Summary","User")">Tài khoản</a> <span class="divider">/</span></li>
+        <li class="active">Sản phẩm đang đấu giá</li>
+    </ul>
+    </ul>
+    <h3>Sản phẩm đấu giá[<small>@Model.Count() sản phẩm</small>]</h3>
+    <hr class="soft" />
+    <table id="myTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Sản phẩm</th>
+                <th>Chi tiết</th>
+                <th>Giá hiện tại</th>
+                <th>Giá tôi đặt</th>
+                <th>Được đăng bởi</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var stt = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@stt</td>
+                    <td><a href='@Url.Action("Details", "Product", new { id = item.Product.ProductID })'> <img width="60" src="~/Img/@(item.Product.ProductID+"_"+item.Product.ProductPicName)" alt="" /></a></td>
+                    <td>@item.Product.ProductDes<br /></td>
+                    <td>@item.Product.ProductPrice</td> @*highest price*@
+                    @if (item.Product.ProductPrice==@item.PriceBid)
+                    {
+                     <td>@item.PriceBid VNĐ (Giữ giá cao nhất)</td>
+                    }
+                    else { 
+                       <td>@item.PriceBid</td>
+                    }
+ 
+                    <td>@item.User.UserName</td>
+                    @if (@item.Product.ProductStatus == 0)
+                    {
+                        <td>Đang chờ xác nhận</td>
+                    }
+                    @if (@item.Product.ProductStatus == 1)
+                    {
+                        <td>Đang đấu giá</td>
+                    }
+                    @if (@item.Product.ProductStatus == 2)
+                    {
+                        <td>Đấu giá thành công</td>
+                    }
+                    @if (@item.Product.ProductStatus == 3)
+                    {
+                        <td>Đấu giá đã hủy</td>
+                    }
+                </tr>
+                    stt++;
+            }
+        </tbody>
+    </table>
+</div>
+</div></div>
+</div>
+@section Scripts{
+    @*<script type="text/javascript">
+        $('.alert-danger').click(function () {
+            var row = $(this).closest('tr').index();
+            if (confirm('Bạn có muốn xóa khỏi danh sách theo dõi ?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("DeleteFavProduct")',
+                    dataType: 'json',
+                    data: { id: $(this).data('id') },
+                    success: function (data) {
+                        document.getElementById("myTable").deleteRow(row + 1);
+                    },
+                    error: function (ex) {
+                        alert("Fail" + ex);
+                    }
+                });
+                return false;
+            }
+        });
+    </script>*@
+}

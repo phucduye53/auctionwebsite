@@ -17,6 +17,7 @@
     <link href="~/Content/themes/css/font-awesome.css" rel="stylesheet" type="text/css">
     <!-- Google-code-prettify -->
     <link href="~/Content/themes/js/google-code-prettify/prettify.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
     <!-- fav and touch icons -->
     <link rel="shortcut icon" href="themes/images/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/Content/themes/images/ico/apple-touch-icon-144-precomposed.png">
@@ -48,26 +49,17 @@
                     </a>
                     <div class="navbar-inner">
                         <a class="brand" href="index.html"><img src="~/Content/themes/images/logo.png" alt="Bootsshop" /></a>
-                        <form class="form-inline navbar-search" method="post" action="products.html">
-                            <input id="srchFld" class="srchTxt" type="text" />
-                            <select class="srchTxt">
-                                <option>All</option>
-                                <option>CLOTHES </option>
-                                <option>FOOD AND BEVERAGES </option>
-                                <option>HEALTH & BEAUTY </option>
-                                <option>SPORTS & LEISURE </option>
-                                <option>BOOKS & ENTERTAINMENTS </option>
-                            </select>
-                            <button type="submit" id="submitButton" class="btn btn-primary">Tìm kiếm</button>
-                        </form>
+                        @{
+                            Html.RenderAction("LoadSearchBar","Search");
+                        }
                         <ul id="topMenu" class="nav pull-right">
                             <li class=""><a href="">Liên hệ</a></li>
                             @if (CurrentContext.IsLogged() == false)
                             {
-                                <li class=""><a href="">Đăng ký</a></li>
+                                <li class=""><a href="@Url.Action("Create","User")">Đăng ký</a></li>
     <li class="">
-        <a href="#login" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
-        <div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
+        <a href='@Url.Action("Login","User")' role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
+        @*<div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>Đăng nhập</h3>
@@ -88,13 +80,13 @@
                 </form>
                 <button type="submit" class="btn btn-success">Đăng nhập</button>
              </div>
-          </div>
+          </div>*@
      </li>
                             }
                             else
                             {
                                 <li class="">
-                                    <a href="" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Tài khoản</span></a>
+                                    <a href="@Url.Action("Summary","User")" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Tài khoản</span></a>
                                 </li>
                                <li class="">
                                       <a href="@Url.Action("Logout","User")">Đăng xuất</a>
@@ -180,10 +172,10 @@
                         <li class="subMenu open">
                             <a> Tài khoản </a>
                             <ul>
-                                <li><a href=""><i class="icon-chevron-right"></i>Sản phẩm đấu giá</a></li>
-                                <li><a href=""><i class="icon-chevron-right"></i>Đã đấu giá xong</a></li>
-                                <li><a href=""><i class="icon-chevron-right"></i>Đang đấu giá</a></li>
-                                <li><a href=""><i class="icon-chevron-right"></i>Sản phẩm đang theo dõi</a></li>
+                                <li><a href="@Url.Action("Summary","User")"><i class="icon-chevron-right"></i>Tổng quát</a></li>
+                                <li><a href="@Url.Action("Index","Product")"><i class="icon-chevron-right"></i>Sản phẩm đã đăng</a></li>
+                                <li><a href="@Url.Action("BiddingList","User")"><i class="icon-chevron-right"></i>Sản phẩm đang đấu giá</a></li>
+                                <li><a href="@Url.Action("FollowList","User")"><i class="icon-chevron-right"></i>Sản phẩm đang theo dõi</a></li>
                             </ul>
                         </li>
                     </ul>

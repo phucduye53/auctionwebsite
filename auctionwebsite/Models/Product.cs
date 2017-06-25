@@ -21,6 +21,7 @@ namespace auctionwebsite.Models
         public int ProductSoldPrice { get; set; }
         public int ProductSoldInstantPrice { get; set; }
         public string ProductDes{ get; set; }
+        public string ProductHtmlDes { get; set; }
         public int ProductStatus { get; set; }
         public string ProductDateSold { get; set; }
         public string ProductPicName { get; set; }
@@ -33,6 +34,7 @@ namespace auctionwebsite.Models
         public int UserID { get; set; }
         public int UserBuyID { get; set; }
         public int ProductPointRequired { get; set; }
+        public int ProductView { get; set; }
         public virtual Cate Cate { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<FileDetail> FileDetails { get; set; }
