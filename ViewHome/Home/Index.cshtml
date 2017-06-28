@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/home_layout.cshtml";
+}
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["message"]
+    </div>
+}
+<div class="span9">
+    <div class="well well-small">
+        <h4>Top sản phẩm có giá cao nhất</h4>
+        @{
+            Html.RenderAction("LoadHomePriceProduct");
+        }
+    </div>
+    <div class="well well-small">
+        <h4>Top sản phẩm có nhiều lượt đấu giá nhất</h4>
+        @{
+            Html.RenderAction("LoadHomeBiddingProduct");
+        }
+    </div>
+    <div class="well well-small">
+        <h4>Top sản phẩm sắp kết thúc</h4>
+        @{
+            Html.RenderAction("LoadHomeDateProduct");
+        }
+    </div>
+
+
+</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $('[data-countdown]').each(function () {
+            var $this = $(this), finalDate = $(this).data('countdown'),data = $(this).data('id');
+            $this.countdown(finalDate, function (event) {
+            }).on('update.countdown', function (event) {
+                var format = '%H:%M:%S';
+                if (event.offset.totalDays > 0) {
+                    format = '%-d Ngày ' + format;
+                }
+                $(this).html(event.strftime("Còn "+format));
+            })
+            .on('finish.countdown', function (event) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("BidOver","Product")',
+                    data: {
+                        proid: data
+                    },
+                    success: function (data) {
+                        $(this).html('Đấu giá kết thúc');
+                    },
+                    error: function (ex) {
+                        alert("Fail " + ex.Message);
+                    }
+                });
+            });
+        });
+    </script>
+}
