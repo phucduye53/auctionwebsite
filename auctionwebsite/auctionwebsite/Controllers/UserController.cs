@@ -152,6 +152,11 @@ namespace auctionwebsite.Controllers
             //check if any of the Email matches the Email specified in the Parameter using the ANY extension method.  
             return Json(!db.Users.Any(x => x.UserEmail == UserEmail), JsonRequestBehavior.AllowGet);
         }
+        public JsonResult IsEmailNotExits(string UserEmail)
+        {
+            //check if any of the Email matches the Email specified in the Parameter using the ANY extension method.  
+            return Json(db.Users.Any(x => x.UserEmail == UserEmail), JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Login()
         {
             return View();
@@ -308,7 +313,43 @@ namespace auctionwebsite.Controllers
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
         }
-
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ForgotPassword([Bind(Include = "UserEmail")]ForgotPassword model)
+        {
+            var user = db.Users.Where(u => u.UserEmail == model.UserEmail).FirstOrDefault();
+            if (user != null)
+            {
+                string content = System.IO.File.ReadAllText(Server.MapPath("~/MailTemplate/ForgotPassword/Forgot.html"));
+                string toUserEmail = user.UserEmail;
+                string password = Helpers.Helpers.GeneratePassword(); // 
+                content = content.Replace("{{UserName}}", user.UserName);
+                content = content.Replace("{{UserID}}", user.UserID.ToString());
+                content = content.Replace("{{UserEmail}}", user.UserEmail);
+                content = content.Replace("{{UserPassword}}", password);
+                MailHelper.SendMail(toUserEmail, "Yêu cầu đổi mật khẩu", content);
+                ViewBag.Successmsg = "Mật khẩu mới mà bạn yêu cầu đã được gởi về Email :" + model.UserEmail.ToString();
+                user.UserID = user.UserID;
+                user.UserEmail = user.UserEmail;
+                user.UserPassword = password;
+                user.ConfirmPassword = password;
+                user.UserLevel = user.UserLevel;
+                user.UserFirstName = user.UserFirstName;
+                user.UserLastName = user.UserLastName;
+                user.UserName = user.UserName;
+                user.Password = Helpers.Helpers.EncodePasswordMd5(password);
+                db.SaveChanges();
+                return View();
+            }
+            else
+            {
+                ViewBag.Errormsg = "Email không đúng";
+                return View();
+            }
+        }
     }
 }
     
