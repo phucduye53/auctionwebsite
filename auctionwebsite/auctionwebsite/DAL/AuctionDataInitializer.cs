@@ -11,7 +11,6 @@ namespace auctionwebsite.DAL
     {
         protected override void Seed(AuctionContext context)
         {
-
             var Cateparents = new List<Cateparent>
            {
                new Cateparent{CateparentName="Tủ sách"},
@@ -59,13 +58,27 @@ namespace auctionwebsite.DAL
             context.SaveChanges();
             var Products = new List<Product>
             {
-                new Product{ProductName="Quạt máy xịn pro",ProductDateSold="2017/06/30 03:00",ProductPrice=200000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=1},
-                new Product{ProductName="Máy ảnh xịn",ProductDateSold="2017/06/2 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=3,CateID=20,CateparentID=5,UserID=2},
-                new Product{ProductName="Máy ảnh rất xịn",ProductDateSold="2017/06/30 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
-                new Product{ProductName="Máy ảnh xịn cấp 2",ProductDateSold="2017/06/26 03:00",ProductPrice=400000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
-                new Product{ProductName="Máy ảnh xịn cấp 3",ProductDateSold="2017/06/27 03:00",ProductPrice=300000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
-                new Product{ProductName="Máy ảnh xịn cấp 4",ProductDateSold="2017/06/28 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
-                new Product{ProductName="Máy ảnh xịn cấp 5",ProductDateSold="2017/06/29 03:00",ProductPrice=500000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=2}
+                new Product{ProductName="Quạt máy xịn pro",ProductDateSold="2017/07/01 03:00",ProductPrice=200000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=1},
+                new Product{ProductName="Máy ảnh xịn",ProductDateSold="2017/07/01 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=3,CateID=20,CateparentID=5,UserID=2},
+                new Product{ProductName="Máy ảnh rất xịn",ProductDateSold="2017/07/02 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh xịn cấp 2",ProductDateSold="2017/07/03 03:00",ProductPrice=400000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh xịn cấp 3",ProductDateSold="2017/07/04 03:00",ProductPrice=300000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh xịn cấp 4",ProductDateSold="2017/07/04 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh xịn cấp 5",ProductDateSold="2017/07/05 03:00",ProductPrice=500000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=2},
+                new Product{ProductName="Máy ảnh xịn cấp 6",ProductDateSold="2017/07/04 03:00",ProductPrice=300000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh xịn cấp 7",ProductDateSold="2017/07/04 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=2},
+                new Product{ProductName="Máy ảnh xịn cấp 8",ProductDateSold="2017/07/05 03:00",ProductPrice=500000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=2},
+                new Product{ProductName="Máy ảnh dỏm cấp 1",ProductDateSold="2017/07/04 03:00",ProductPrice=300000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=1},
+                new Product{ProductName="Máy ảnh dỏm cấp 2",ProductDateSold="2017/07/04 03:00",ProductPrice=200000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=2},
+                new Product{ProductName="Máy ảnh dỏm cấp 3",ProductDateSold="2017/07/05 03:00",ProductPrice=500000,ProductPicName="mayanh.jpg",ProductPicExtension=".jpg",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=20,CateparentID=5,UserID=2},
+                new Product{ProductName="Quạt máy xịn cấp 1",ProductDateSold="2017/07/01 03:00",ProductPrice=500000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=1},
+                new Product{ProductName="Quạt máy xịn cấp 2",ProductDateSold="2017/07/01 03:00",ProductPrice=300000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=3},
+                new Product{ProductName="Quạt máy xịn cấp 3",ProductDateSold="2017/07/02 03:00",ProductPrice=200000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=3},
+                new Product{ProductName="Quạt máy dỏm cấp 1",ProductDateSold="2017/07/03 03:00",ProductPrice=100000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=3},
+                new Product{ProductName="Quạt máy dỏm cấp 2",ProductDateSold="2017/07/01 03:00",ProductPrice=200000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=2},
+                new Product{ProductName="Quạt máy dỏm cấp 3",ProductDateSold="2017/07/02 03:00",ProductPrice=300000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=2},
+                new Product{ProductName="Quạt máy dỏm cấp 4",ProductDateSold="2017/07/03 03:00",ProductPrice=250000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=1},
+                new Product{ProductName="Quạt máy dỏm cấp 5",ProductDateSold="2017/07/01 03:00",ProductPrice=220000,ProductPicName="quat1.png",ProductPicExtension=".png",ProductDes="Đẹp",ProductPointRequired=100,ProductTickSize=10000,ProductStatus=1,CateID=5,CateparentID=2,UserID=1}
             };
             Products.ForEach(s => context.Products.Add(s));
             context.SaveChanges();
@@ -90,11 +103,48 @@ namespace auctionwebsite.DAL
                 new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=6},
                 new FileDetail{FileName="mayanh3.jpg",Extension=".jpg",ProductID=7},
                 new FileDetail{FileName="mayanh4.jpg",Extension=".jpg",ProductID=7},
-                new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=7}
+                new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=7},
+                new FileDetail{FileName="mayanh3.jpg",Extension=".jpg",ProductID=8},
+                new FileDetail{FileName="mayanh4.jpg",Extension=".jpg",ProductID=8},
+                new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=8},
+                new FileDetail{FileName="mayanh3.jpg",Extension=".jpg",ProductID=9},
+                new FileDetail{FileName="mayanh4.jpg",Extension=".jpg",ProductID=9},
+                new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=9},
+                new FileDetail{FileName="mayanh3.jpg",Extension=".jpg",ProductID=10},
+                new FileDetail{FileName="mayanh4.jpg",Extension=".jpg",ProductID=10},
+                new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=10},
+                new FileDetail{FileName="mayanh3.jpg",Extension=".jpg",ProductID=11},
+                new FileDetail{FileName="mayanh4.jpg",Extension=".jpg",ProductID=11},
+                new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=11},
+                new FileDetail{FileName="mayanh3.jpg",Extension=".jpg",ProductID=12},
+                new FileDetail{FileName="mayanh4.jpg",Extension=".jpg",ProductID=12},
+                new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=12},
+                new FileDetail{FileName="mayanh3.jpg",Extension=".jpg",ProductID=13},
+                new FileDetail{FileName="mayanh4.jpg",Extension=".jpg",ProductID=13},
+                new FileDetail{FileName="mayanh5.jpg",Extension=".jpg",ProductID=13},
+                new FileDetail{FileName="quat2.png",Extension=".png",ProductID=14},
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=14},
+                new FileDetail{FileName="quat2.png",Extension=".png",ProductID=15},
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=15},
+                new FileDetail{FileName="quat2.png",Extension=".png",ProductID=16},
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=16},
+                new FileDetail{FileName="quat2.png",Extension=".png",ProductID=17},
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=17},
+                new FileDetail{FileName="quat2.png",Extension=".png",ProductID=18},
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=18},
+                new FileDetail{FileName="quat2.png",Extension=".png",ProductID=19},
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=19},
+                new FileDetail{FileName="quat2.png",Extension=".png",ProductID=20},
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=20},
+                new FileDetail{FileName="quat2.png",Extension=".png",ProductID=21},
+                new FileDetail{FileName="quat3.png",Extension=".png",ProductID=21},
 
             };
             FileDetails.ForEach(s => context.FileDetails.Add(s));
             context.SaveChanges();
         }
+
+        
+        
     }
 }
