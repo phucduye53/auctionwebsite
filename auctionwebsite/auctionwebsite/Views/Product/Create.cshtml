@@ -118,7 +118,12 @@
                     <label class="control-label" for="textarea">Mô tả</label>
                     <div class="controls">
                         @Html.TextAreaFor(model => model.ProductDes, new { @cols = "80", @rows = "4", @class = "input-xxlarge" })
-                        @Html.ValidationMessageFor(model => model.ProductDes, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="textarea">Mô tả chi tiết</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(model => model.ProductHtmlDes, new { @class = "ckeditor" })
                     </div>
                 </div>
                 <div class="control-group">
@@ -160,7 +165,10 @@
 @section Scripts
 {
     <script type="text/javascript">
-    $(document).ready(function () {
+        $(document).ready(function () {
+        $(function () {
+            $('#ProductHtmlDes').ckeditor();
+        });
         var counter = 1;
         $('#addImages').click(function () {
             $("#insert").toggle();
