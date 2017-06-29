@@ -71,7 +71,7 @@ namespace auctionwebsite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CheckLogin(Permission = 0)]
-        public ActionResult Create([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, HttpPostedFileBase fileMainInput, List<HttpPostedFileBase> fileSubInput)
+        public ActionResult Create([Bind(Include = "ProductID,ProductHtmlDes,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, HttpPostedFileBase fileMainInput, List<HttpPostedFileBase> fileSubInput)
         {
             if(fileMainInput == null)
             {
@@ -137,7 +137,7 @@ namespace auctionwebsite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CheckLogin(Permission = 0)]
-        public ActionResult Edit([Bind(Include = "ProductID,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, List<HttpPostedFileBase> fileSubInput)
+             public ActionResult Edit([Bind(Include = "ProductID,ProductHtmlDes,ProductSoldInstantPrice,ProductName,ProductPrice,ProductSoldPrice,ProductDateSold,ProductTickSize,ProductDes,CateID,CateparentID,UserID,ProductPointRequired")] Product product, List<HttpPostedFileBase> fileSubInput)
         {
             if (ModelState.IsValid)
                 {
@@ -401,15 +401,12 @@ namespace auctionwebsite.Controllers
         public JsonResult BidOver(int proid)
         {
             Product product = db.Products.Include(s => s.Biddings).Include(s => s.FileDetails).Include(s => s.User).Include(p => p.Favorites).Include(p => p.Biddings).SingleOrDefault(x => x.ProductID == proid);
+            var bidtemp = db.Biddings.Where(p => p.ProductID == proid).ToList();
             if (product.ProductStatus == 3)
             {
                 return Json(new { Result = "OK" });
             }
-            product.ProductStatus = 3;
-            db.Entry(product).State = EntityState.Modified;
-            db.SaveChanges();
             // Handle
-            var bidtemp = db.Biddings.Where(p => p.ProductID == proid).ToList();
             if (bidtemp.Count() == 0)
             {
                 string content = System.IO.File.ReadAllText(Server.MapPath("~/MailTemplate/BidOver/Seller.html"));
@@ -426,9 +423,16 @@ namespace auctionwebsite.Controllers
                 {
                     MailHelper.SendMail(toSellerEmail, "Đấu giá sản phẩm - Người mua", content);
                 }
+                product.ProductStatus = 3;
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
             }
             else
             {
+                //handle product
+                Bidding bid = bidtemp.OrderByDescending(p => p.ProductBid).FirstOrDefault();
+                product.UserBuyID = bid.UserID;
+                //
                 Bidding highest = db.Biddings.Where(s => s.ProductID == proid && product.ProductPrice == s.ProductBid).OrderByDescending(s => s.ProductBid).FirstOrDefault();
                 User tempBuyer = db.Users.Where(s => s.UserID == product.UserID).FirstOrDefault();
                 User tempSeller = db.Users.Where(s => s.UserID == highest.UserID).FirstOrDefault();
@@ -462,6 +466,9 @@ namespace auctionwebsite.Controllers
                     MailHelper.SendMail(toBuyerEmail, "Đấu giá sản phẩm - Người mua", content2);
 
                 }
+                product.ProductStatus = 3;
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
             }
 
 
