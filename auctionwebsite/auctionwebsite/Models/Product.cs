@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace auctionwebsite.Models
 {
@@ -21,9 +22,12 @@ namespace auctionwebsite.Models
         public int ProductSoldPrice { get; set; }
         public int ProductSoldInstantPrice { get; set; }
         public string ProductDes{ get; set; }
+        [AllowHtml]
+        public string ProductHtmlDes { get; set; }
         public int ProductStatus { get; set; }
         public string ProductDateSold { get; set; }
         public string ProductPicName { get; set; }
+        public string DateTimeCreate { get; set; }
         public string ProductPicExtension { get; set; }
 
         [Required(ErrorMessage = "Chưa chọn danh mục .")]
