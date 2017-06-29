@@ -33,8 +33,14 @@
               <tr>
                 <td><a href="@Url.Action("Details", "Product", new { id = item.ProductID})"> <img width="60" src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="" /></a></td>
                 <td>@item.ProductDes<br /></td>
-                <td>@item.Biddings.Where(p=>p.BidStatus != 0 && p.ProductBid == item.ProductPrice).Select(p=>p.User.UserName)</td> @*user highest price buy*@
-                <td>@item.ProductPrice</td>
+                  @if(@item.Biddings.Where(p=>p.BidStatus != 0 && p.ProductBid == item.ProductPrice).Select(p=>p.User.UserName).Count()==0)
+                  {
+                      <td>Chưa có ai đấu giá</td>
+                  }else{
+                       <td>@item.Biddings.Where(p=>p.BidStatus != 0 && p.ProductBid == item.ProductPrice).Select(p=>p.User.UserName).ToString()</td>
+                  } @*user highest price buy*@)
+               
+                <td>@item.ProductPrice VNĐ</td>
                   @if(@item.ProductStatus == 0 )
                   {
                     <td>Đang chờ xác nhận</td>
