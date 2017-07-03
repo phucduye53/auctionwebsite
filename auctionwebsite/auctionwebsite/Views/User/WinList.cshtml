@@ -1,0 +1,71 @@
+﻿@model PagedList.IPagedList<auctionwebsite.Models.Product>
+@using auctionwebsite.Helpers
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Sản phẩm đã thắng cuộc";
+    Layout = "~/Views/Shared/user_layout.cshtml";
+}
+
+<!DOCTYPE html>
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Summary","User")">Tài khoản</a> <span class="divider">/</span></li>
+        <li class="active">Sản phẩm đang đấu giá</li>
+    </ul>
+    </ul>
+    <h3>Sản phẩm đã thắng[<small>@Model.Count() sản phẩm</small>]</h3>
+    <hr class="soft" />
+    <table id="myTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Sản phẩm</th>
+                <th>Chi tiết</th>
+                <th>Giá tôi đặt</th>
+                <th>Được đăng bởi</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var stt = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@stt</td>
+                    <td><a href='@Url.Action("Details", "Product", new { id = item.ProductID })'> <img width="60" src="~/Img/@(item.ProductID+"_"+item.ProductPicName)" alt="@item.ProductName" /></a></td>
+                    <td>@item.ProductDes VNĐ<br /></td>
+                    <td>@item.ProductPrice VNĐ</td>
+                    <td>@item.User.UserName</td>
+                    @if (@item.ProductStatus == 0)
+                    {
+                        <td>Đang chờ xác nhận</td>
+                    }
+                    @if (@item.ProductStatus == 1)
+                    {
+                        <td>Đang đấu giá</td>
+                    }
+                    @if (@item.ProductStatus == 2)
+                    {
+                        <td>Đấu giá thành công</td>
+                    }
+                    @if (@item.ProductStatus == 3)
+                    {
+                        <td>Đấu giá đã hủy</td>
+                    }
+                </tr>
+                    stt++;
+            }
+        </tbody>
+    </table>
+    <div class="pagination">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("WinList",new {page}))
+    </div>
+</div>
+</div></div>
+</div>
