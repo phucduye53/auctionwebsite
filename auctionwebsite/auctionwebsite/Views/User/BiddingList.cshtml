@@ -1,4 +1,6 @@
-﻿@model IEnumerable<auctionwebsite.Models.Bidding>
+﻿@model PagedList.IPagedList<auctionwebsite.Models.Bidding>
+@using auctionwebsite.Helpers
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "Sản phẩm đang đấu giá";
     Layout = "~/Views/Shared/user_layout.cshtml";
@@ -34,18 +36,18 @@
             {
                 <tr>
                     <td>@stt</td>
-                    <td><a href='@Url.Action("Details", "Product", new { id = item.Product.ProductID })'> <img width="60" src="~/Img/@(item.Product.ProductID+"_"+item.Product.ProductPicName)" alt="" /></a></td>
-                    <td>@item.Product.ProductDes<br /></td>
-                    <td>@item.Product.ProductPrice</td> @*highest price*@
+                    <td><a href='@Url.Action("Details", "Product", new { id = item.Product.ProductID })'> <img width="60" src="~/Img/@(item.Product.ProductID+"_"+item.Product.ProductPicName)" alt="@item.Product.ProductName" /></a></td>
+                    <td>@item.Product.ProductDes VNĐ<br /></td>
+                    <td>@item.Product.ProductPrice VNĐ</td> @*highest price*@
                     @if (item.Product.ProductPrice==@item.PriceBid)
                     {
                      <td>@item.PriceBid VNĐ (Giữ giá cao nhất)</td>
                     }
                     else { 
-                       <td>@item.PriceBid</td>
+                       <td>@item.PriceBid VNĐ</td>
                     }
  
-                    <td>@item.User.UserName</td>
+                    <td>@item.Product.User.UserName</td>
                     @if (@item.Product.ProductStatus == 0)
                     {
                         <td>Đang chờ xác nhận</td>
@@ -67,28 +69,11 @@
             }
         </tbody>
     </table>
+    <div class="pagination">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("BiddingList", new { page }))
+    </div>
 </div>
 </div></div>
 </div>
-@section Scripts{
-    @*<script type="text/javascript">
-        $('.alert-danger').click(function () {
-            var row = $(this).closest('tr').index();
-            if (confirm('Bạn có muốn xóa khỏi danh sách theo dõi ?')) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("DeleteFavProduct")',
-                    dataType: 'json',
-                    data: { id: $(this).data('id') },
-                    success: function (data) {
-                        document.getElementById("myTable").deleteRow(row + 1);
-                    },
-                    error: function (ex) {
-                        alert("Fail" + ex);
-                    }
-                });
-                return false;
-            }
-        });
-    </script>*@
-}
