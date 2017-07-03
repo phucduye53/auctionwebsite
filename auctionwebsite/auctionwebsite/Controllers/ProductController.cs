@@ -10,6 +10,7 @@ using auctionwebsite.Models;
 using auctionwebsite.DAL;
 using auctionwebsite.Helpers;
 using System.IO;
+using PagedList;
 
 namespace auctionwebsite.Controllers
 {
@@ -19,11 +20,34 @@ namespace auctionwebsite.Controllers
 
         // GET: /Product/
         [CheckLogin(Permission=0)]
-        public ActionResult Index()
+        public ActionResult Index(int? SortOrder, int? page)
         {
             var User = CurrentContext.GetCurUser();
             var products = db.Products.Where(u=>u.UserID==User.UserID);
-            return View(products.ToList());
+            switch(SortOrder)
+            {
+                case 0:
+                    break;
+                case 1:
+                    products = products.Where(p => p.ProductStatus == 0).OrderBy(s => s.ProductName);
+                    break;
+                case 2:
+                    products = products.Where(p => p.ProductStatus == 1).OrderBy(s => s.ProductName);
+                    break;
+                case 3:
+                    products = products.Where(p => p.ProductStatus == 3).OrderBy(s => s.ProductName);
+                    break;
+                case 4:
+                    products = products.Where(p => p.UserBuyID != 0).OrderBy(s => s.ProductName);
+                    break;
+                default:
+                    products = products.OrderBy(s => s.ProductName);
+                    break;
+            }
+            ViewBag.CurrentSort = SortOrder;
+             int pageSize = 3;
+             int pageNumber = (page ?? 1);
+             return View(products.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: /Product/Details/5
@@ -466,7 +490,7 @@ namespace auctionwebsite.Controllers
                     MailHelper.SendMail(toBuyerEmail, "Đấu giá sản phẩm - Người mua", content2);
 
                 }
-                product.ProductStatus = 3;
+                product.ProductStatus = 2;
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
             }
