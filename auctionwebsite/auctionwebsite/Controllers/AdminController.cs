@@ -10,7 +10,7 @@ using auctionwebsite.Models;
 using auctionwebsite.DAL;
 using auctionwebsite.Helpers;
 using System.IO;
-
+using PagedList;
 namespace auctionwebsite.Controllers
 {
     public class AdminController : Controller
@@ -22,38 +22,26 @@ namespace auctionwebsite.Controllers
             return View();
         }
         [CheckLogin(Permission = 1)]
-        public ActionResult Product(string searchString, int? page = 1)
+        public ActionResult Product(string searchString,string CurrentSearchText, int? page )
         {
-            int n = db.Cates.Count();
+            var products = db.Products.Where(p => p.ProductStatus != 0).OrderBy(p=>p.ProductID);
             if (searchString != null)
             {
                 page = 1;
             }
-
-            int pageSize = 10;
-            int nPages = n / pageSize;
-            int m = n % pageSize;
-            if (m > 0)
-            {
-                nPages++;
-
-            }
-            ViewBag.Pages = nPages;
-            ViewBag.CurPage = page;
-
-
-            var product = from s in db.Products
-                        select s;
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                product = product.Where(s => s.ProductName.Contains(searchString)
-                                        || s.User.UserName.Contains(searchString));
-            }
             else
             {
-                product = db.Products.Include(c => c.User).Take(pageSize);
+                searchString = CurrentSearchText;
             }
-            return View(product);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(s => s.ProductName.Contains(searchString)).OrderBy(p=>p.ProductID);
+                ViewBag.CurrentSearchText = searchString;
+            }
+            //var products = db.Products.Include(p=>p.Favorites).Where(p=>User.UserID.Equals(p.UserID));
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(products.ToPagedList(pageNumber, pageSize));
         }
         [HttpPost]
         [CheckLogin(Permission = 1)]
