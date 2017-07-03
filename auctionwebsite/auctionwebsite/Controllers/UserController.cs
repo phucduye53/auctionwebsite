@@ -7,7 +7,8 @@ using auctionwebsite.DAL;
 using System.Web.Security;
 using auctionwebsite.Helpers;
 using System;
-using CaptchaMvc.HtmlHelpers;  
+using CaptchaMvc.HtmlHelpers;
+using PagedList;
 
 
 namespace auctionwebsite.Controllers
@@ -195,12 +196,14 @@ namespace auctionwebsite.Controllers
              return View();
          }
          [CheckLogin]
-         public ActionResult FollowList()
+         public ActionResult FollowList(int? page)
          {
              var User = CurrentContext.GetCurUser();
-             var products = db.Products.Where(s => s.Favorites.Any(f => f.UserID == User.UserID));
+             var products = db.Products.Where(s => s.Favorites.Any(f => f.UserID == User.UserID)).OrderBy(p=>p.ProductName);
              //var products = db.Products.Include(p=>p.Favorites).Where(p=>User.UserID.Equals(p.UserID));
-             return View(products.ToList());
+             int pageSize = 5;
+             int pageNumber = (page ?? 1);
+             return View(products.ToPagedList(pageNumber, pageSize));
          }
         [HttpPost] 
         public JsonResult DeleteFavProduct(int id)
@@ -224,12 +227,22 @@ namespace auctionwebsite.Controllers
              }
          }
         [CheckLogin]
-        public ActionResult BiddingList()
+        public ActionResult BiddingList(int? page)
         {
             var User = CurrentContext.GetCurUser();
-            var products = db.Biddings.GroupBy(p => p.UserID).Select(t => t.OrderByDescending(p => p.ProductBid).FirstOrDefault()).Where(p=>p.UserID==User.UserID);
-            //var products = db.Products.Include(p=>p.Favorites).Where(p=>User.UserID.Equals(p.UserID));
-            return View(products.ToList());
+            var products = db.Biddings.GroupBy(p => p.UserID).Select(t => t.OrderByDescending(p => p.ProductBid).FirstOrDefault()).Where(p=>p.UserID==User.UserID).OrderBy(p=>p.Product.ProductName);
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(products.ToPagedList(pageNumber, pageSize));
+        }
+        [CheckLogin]
+        public ActionResult WinList(int? page)
+        {
+            var User = CurrentContext.GetCurUser();
+            var products = db.Products.Where(p=>p.UserBuyID==User.UserID).OrderBy(p=>p.ProductName);
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(products.ToPagedList(pageNumber, pageSize));
         }
         [HttpPost] 
         public ActionResult RateLikeUser(int userid,int targetid,string text,int proid)
