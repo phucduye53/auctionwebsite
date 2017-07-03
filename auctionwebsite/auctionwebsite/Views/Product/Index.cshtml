@@ -1,4 +1,6 @@
-﻿@model IEnumerable<auctionwebsite.Models.Product>
+﻿@model PagedList.IPagedList<auctionwebsite.Models.Product>
+@using auctionwebsite.Helpers
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
@@ -15,6 +17,18 @@
     </ul>
     <h3>Sản phẩm của tôi đã đăng[<small>@Model.Count() sản phẩm</small>]</h3>
     <hr class="soft"/>
+    <form class="form-horizontal span6">
+        <div class="control-group">
+            <label class="control-label alignL">Sắp xếp</label>
+            <select id="SortOrder" name="SortOrder" onchange="SelectionChanged()">
+                <option value="0">Lựa chọn</option>
+                <option value="1">Sản phẩm đã đăng</option>
+                <option value="1">Sản phẩm đã xác nhận</option>
+                <option value="2">Sản phẩm đã hủy</option>
+                <option value="3">Sản phẩm đã có người mua</option>
+            </select>
+        </div>
+    </form>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -38,7 +52,7 @@
                       <td>Chưa có ai đấu giá</td>
                   }else{
                        <td>@item.Biddings.Where(p=>p.BidStatus != 0 && p.ProductBid == item.ProductPrice).Select(p=>p.User.UserName).ToString()</td>
-                  } @*user highest price buy*@)
+                  } @*user highest price buy*@
                
                 <td>@item.ProductPrice VNĐ</td>
                   @if(@item.ProductStatus == 0 )
@@ -63,6 +77,25 @@
             }
         </tbody>
     </table>
+    <div class="pagination">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    </div>
 </div>
 </div></div>
 </div>
+@section Scripts
+{
+    <script type="text/javascript">
+
+        function SelectionChanged()
+        {
+            var order = document.getElementById("SortOrder");
+            var OrderValue = order.options[order.selectedIndex].value;
+            var url = '@Html.Raw(Url.Action("Index", "Product", new { SortOrder ="para3"}))';
+            url = url.replace("para3", OrderValue);
+            window.location = url;
+        }
+    </script>
+}
